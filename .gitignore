@@ -23,4 +23,5 @@
 *.iml
 lib/
 out/
+.idea/
 
