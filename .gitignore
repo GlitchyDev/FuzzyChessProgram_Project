@@ -20,12 +20,7 @@
 *.rar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-*.xml
-*.html
 *.iml
-*.kotlin_module
-*.dylib
-lib/javafx.properties
-out/production/FuzzyChessProgram_Project/TV_2.png
-out/production/FuzzyChessProgram_Project/Wine_Bottle.png
+lib/
+out/
+
