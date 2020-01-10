@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Root;
 
 
 public class FuzzyChessAIProgram extends Application {
