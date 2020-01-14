@@ -59,11 +59,19 @@ public class GameState {
                     break;
                 case MOVEMENT_PAWN_ADVANCE:
                     int offset = gamePiece.getGameTeam() == GameTeam.WHITE ? -1 : 1;
-                    if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getOffsetLocation(0,offset))) {
-                        if(!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getOffsetLocation(0,offset))) {
-                            if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getOffsetLocation(0,offset * 2))) {
-                                if(!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getOffsetLocation(0,offset * 2))) {
-                                    validActions.add(new MovementAction(gamePiece,ActionType.MOVEMENT_PAWN_ADVANCE,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getOffsetLocation(0,offset * 2)));
+                    boolean pass = true;
+                    for(Action action: pastActions) {
+                        if(action.getGamePiece().equals(gamePiece)) {
+                            pass = false;
+                        }
+                    }
+                    if(pass) {
+                        if (gameBoard.isInsideBoard(gamePiece.getBoardLocation().getOffsetLocation(0, offset))) {
+                            if (!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getOffsetLocation(0, offset))) {
+                                if (gameBoard.isInsideBoard(gamePiece.getBoardLocation().getOffsetLocation(0, offset * 2))) {
+                                    if (!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getOffsetLocation(0, offset * 2))) {
+                                        validActions.add(new MovementAction(gamePiece, ActionType.MOVEMENT_PAWN_ADVANCE, gamePiece.getBoardLocation(), gamePiece.getBoardLocation().getOffsetLocation(0, offset * 2)));
+                                    }
                                 }
                             }
                         }
@@ -76,24 +84,24 @@ public class GameState {
                     switch(gamePiece.getGameTeam()) {
                         case WHITE:
                             if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1))) {
-                                if (!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1))) {
+                                if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1))  && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1)).getGameTeam() != gamePiece.getGameTeam()) {
                                     validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1)));
                                 }
                             }
                             if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1))) {
-                                if (!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1))) {
+                                if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1)).getGameTeam() != gamePiece.getGameTeam()) {
                                     validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1)));
                                 }
                             }
                             break;
                         case BLACK:
-                            if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1))) {
-                                if (!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1))) {
+                            if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1)) ) {
+                                if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1))  && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1)).getGameTeam() != gamePiece.getGameTeam()) {
                                     validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1)));
                                 }
                             }
                             if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1))) {
-                                if (!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1))) {
+                                if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1))  && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1)).getGameTeam() != gamePiece.getGameTeam()) {
                                     validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1)));
                                 }
                             }

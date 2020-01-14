@@ -1,5 +1,6 @@
 package GameComponents;
 
+import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Controllers.PlayerController;
@@ -11,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -30,6 +32,7 @@ public class ProgramWindow extends Application {
 
 
     private int debugValue = 0;
+    private BoardLocation boardLocation;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -97,26 +100,35 @@ public class ProgramWindow extends Application {
         canvas.setOnMouseClicked(event -> {
             System.out.println("Bees");
 
-            switch(debugValue) {
-                case 0:
-                    GamePiece gamePiece = gameState.getGameBoard().getPiece(0,6);
+            if (event.getButton() == MouseButton.PRIMARY) {
+                GamePiece gamePiece = boardLocation == null ? gameState.getGameBoard().getPiece(0,6) : gameState.getGameBoard().getPiece(boardLocation);
+                ArrayList<Action> actions = gameState.getValidActions(gamePiece);
+                for(Action action: actions) {
+                    System.out.println(action);
+                }
+            }
+
+            if (event.getButton() == MouseButton.SECONDARY) {
+                if (debugValue == 0) {
+                    GamePiece gamePiece = gameState.getGameBoard().getPiece(0, 6);
                     ArrayList<Action> actions = gameState.getValidActions(gamePiece);
-                    for(Action action: actions) {
+                    for (Action action : actions) {
                         System.out.println(action);
                     }
-                    break;
-                case 1:
+                    gameState.preformAction(actions.get(0));
+                    boardLocation = actions.get(0).getGamePiece().getBoardLocation();
+                } else {
+                    GamePiece gamePiece1 = gameState.getGameBoard().getPiece(boardLocation);
+                    ArrayList<Action> actions1 = gameState.getValidActions(gamePiece1);
+                    for(Action action: actions1) {
+                        System.out.println(action);
+                    }
+                    gameState.preformAction(actions1.get(0));
+                    boardLocation = actions1.get(0).getGamePiece().getBoardLocation();
+                }
+                System.out.println(gameState.getGameBoard());
 
-
-                    break;
-                case 2:
-
-
-                    break;
-                case 3:
-
-
-                    break;
+                debugValue++;
             }
         });
         canvas.setOnKeyPressed(keyEvent -> {

@@ -126,7 +126,7 @@ public class GameBoard {
     }
 
     public boolean isInsideBoard(BoardLocation boardLocation) {
-        return boardLocation.getX() >= 0 && boardLocation.getY() < BOARD_WIDTH && boardLocation.getY() >= 0 && boardLocation.getY() < BOARD_HEIGHT;
+        return boardLocation.getX() >= 0 && boardLocation.getX() < BOARD_WIDTH && boardLocation.getY() >= 0 && boardLocation.getY() < BOARD_HEIGHT;
     }
 
     public void movePiece(int x1, int y1, int x2, int y2) {
@@ -146,8 +146,13 @@ public class GameBoard {
         String boardString = "";
         for(int y = 0; y < BOARD_HEIGHT; y++) {
             for (int x = 0; x < BOARD_WIDTH; x++) {
-                boardString += "[";
                 if(isSpaceOccupied(x,y)) {
+                    if(getPiece(x,y).getGameTeam() == GameTeam.WHITE) {
+                        boardString += "{";
+                    }
+                    if(getPiece(x,y).getGameTeam() == GameTeam.BLACK) {
+                        boardString += "(";
+                    }
                     switch(getPiece(x,y).getGamePieceType()) {
                         case KING:
                             boardString += "K";
@@ -169,9 +174,18 @@ public class GameBoard {
                             break;
                     }
                 } else {
-                    boardString += " ";
+                    boardString += "[ ";
                 }
-                boardString += "]";
+                if(isSpaceOccupied(x,y)) {
+                    if(getPiece(x,y).getGameTeam() == GameTeam.WHITE) {
+                        boardString += "}";
+                    }
+                    if(getPiece(x,y).getGameTeam() == GameTeam.BLACK) {
+                        boardString += ")";
+                    }
+                } else {
+                    boardString += "]";
+                }
             }
             boardString += "\n";
         }
