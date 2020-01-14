@@ -3,6 +3,7 @@ package GameComponents;
 import GameComponents.Board.BoardDirection;
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.GameTeam;
+import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Board.Turn.ActionType;
@@ -27,28 +28,23 @@ public class GameState {
 
     public ArrayList<Action> getTurnActions(int turnNumber) {
         ArrayList<Action> turnsActions = new ArrayList<>();
-
         int actionOffset = (turnNumber-1) * 2;
-
         if(pastActions.size() > actionOffset) {
             turnsActions.add(pastActions.get(actionOffset));
             if(pastActions.size() > actionOffset + 1) {
                 turnsActions.add(pastActions.get(actionOffset + 1));
             }
         }
-
         return turnsActions;
     }
 
     /**
      * Return all VALID ( Can do ) Actions this piece can do on the provided Board
      * @param gamePiece Piece
-     * @param gameBoard Gameboard in Question
      * @return All Valid Actions
      */
-    public ArrayList<Action> getValidActions(GamePiece gamePiece, GameBoard gameBoard, ArrayList<Action> pastActions) {
+    public ArrayList<Action> getValidActions(GamePiece gamePiece) {
         ArrayList<Action> validActions = new ArrayList<>();
-
         ArrayList<ActionType> availableActions = gamePiece.getGamePieceType().getAvalibleActions();
         for(ActionType actionType: availableActions) {
             switch(actionType) {
@@ -62,7 +58,7 @@ public class GameState {
                     }
                     break;
                 case MOVEMENT_PAWN_ADVANCE:
-                    int offset = gamePiece.getGameTeam() == GameTeam.WHITE ? 1 : -1;
+                    int offset = gamePiece.getGameTeam() == GameTeam.WHITE ? -1 : 1;
                     if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getOffsetLocation(0,offset))) {
                         if(!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getOffsetLocation(0,offset))) {
                             if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getOffsetLocation(0,offset * 2))) {
@@ -105,11 +101,52 @@ public class GameState {
                     }
                     break;
                 case MOVEMENT_KNIGHT:
-                    // Todo add Movement Checker
+                    final BoardLocation[][] knightMovements = new BoardLocation[][]{
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(1,3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(-1,3)},
+
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(1,-3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(-1,-3)},
+
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,-1)},
+
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,-1)},
+                    };
+
+
+                    for(int i = 0; i < knightMovements.length; i++) {
+                        if(gameBoard.isInsideBoard(knightMovements[i][3])) {
+                            if (!gameBoard.isSpaceOccupied(knightMovements[i][3])) {
+                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),knightMovements[i][3]));
+                            }
+                        }
+                    }
                     break;
                 case ATTACK_KNIGHT:
-                    // Todo add Movement Checker
-                    break;
+                    final BoardLocation[][] knightAttacks = new BoardLocation[][]{
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(1,3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(-1,3)},
+
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(1,-3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(-1,-3)},
+
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,-1)},
+
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,-1)},
+                    };
+
+
+                    for(int i = 0; i < knightAttacks.length; i++) {
+                        if(gameBoard.isInsideBoard(knightAttacks[i][3])) {
+                            if (gameBoard.isSpaceOccupied(knightAttacks[i][3])) {
+                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),knightAttacks[i][3]));
+                            }
+                        }
+                    }                    break;
                 case MOVEMENT_BISHOP:
                     final int BISHOP_MOVEMENT_LENGTH = 4;
                     for(BoardDirection boardDirection: BoardDirection.values()) {
@@ -184,7 +221,7 @@ public class GameState {
                                 }
                             }
                         }
-                        if(passCount == BISHOP_ATTACK_LENGTH) {
+                        if(passCount == ROOK_ATTACK_LENGTH) {
                             validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_ROOK,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(boardDirection,ROOK_ATTACK_LENGTH)));
                         }
                     }
@@ -241,9 +278,15 @@ public class GameState {
                     break;
             }
         }
-
-
         return validActions;
+    }
+
+    public void preformAction(Action action) {
+        action.preformAction(gameBoard);
+        pastActions.add(action);
+        if(pastActions.size() % ACTIONS_PER_TURN == 0) {
+            switchTurn();
+        }
     }
 
     public void switchTurn() {

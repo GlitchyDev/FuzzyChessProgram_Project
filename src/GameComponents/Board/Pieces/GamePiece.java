@@ -25,4 +25,12 @@ public class GamePiece {
         return boardLocation;
     }
 
+    public void setBoardLocation(BoardLocation boardLocation) {
+        this.boardLocation = boardLocation;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + gameTeam + " " + gamePieceType + "]";
+    }
 }

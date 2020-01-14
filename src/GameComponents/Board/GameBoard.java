@@ -105,6 +105,22 @@ public class GameBoard {
         return gameBoard[boardLocation.getX()][boardLocation.getY()];
     }
 
+    public void deletePiece(int x, int y) {
+        deletePiece(new BoardLocation(x,y));
+    }
+
+    public void deletePiece(BoardLocation boardLocation) {
+        gameBoard[boardLocation.getX()][boardLocation.getY()] = null;
+    }
+
+    public void addPiece(GamePiece gamePiece, int x, int y) {
+        addPiece(gamePiece, new BoardLocation(x,y));
+    }
+
+    public void addPiece(GamePiece gamePiece, BoardLocation boardLocation) {
+        gameBoard[boardLocation.getX()][boardLocation.getY()] = gamePiece;
+    }
+
     public boolean isInsideBoard(int x, int y) {
         return isInsideBoard(new BoardLocation(x,y));
     }
@@ -112,6 +128,17 @@ public class GameBoard {
     public boolean isInsideBoard(BoardLocation boardLocation) {
         return boardLocation.getX() >= 0 && boardLocation.getY() < BOARD_WIDTH && boardLocation.getY() >= 0 && boardLocation.getY() < BOARD_HEIGHT;
     }
+
+    public void movePiece(int x1, int y1, int x2, int y2) {
+        movePiece(new BoardLocation(x1,y1),new BoardLocation(x2,y2));
+    }
+
+    public void movePiece(BoardLocation oldLocation, BoardLocation newLocation) {
+        GamePiece gamePiece = getPiece(oldLocation);
+        deletePiece(oldLocation);
+        addPiece(gamePiece,newLocation);
+    }
+
 
 
     @Override

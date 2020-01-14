@@ -6,11 +6,13 @@ import javafx.scene.paint.Color;
 public class GUIRenderer {
     private final double canvasWidth;
     private final double canvasHeight;
+    private int debug = 0;
 
     public GUIRenderer(double canvasWidth, double canvasHeight) {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
     }
+
 
 
     public void renderGUI(GraphicsContext gc) {
@@ -19,7 +21,9 @@ public class GUIRenderer {
         gc.setGlobalAlpha(1.0);
         gc.fillRect(0,0,canvasWidth,canvasHeight);
 
+        debug++;
+
         gc.setFill(Color.BLUE);
-        gc.fillRect(Math.random()*canvasWidth,Math.random()*canvasHeight,10,10);
+        gc.fillRect(debug%canvasWidth,debug/canvasWidth%canvasHeight,10,10);
     }
 }

@@ -1,5 +1,7 @@
 package GameComponents;
 
+import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.Board.Turn.Action;
 import GameComponents.Controllers.PlayerController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -11,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 
 public class ProgramWindow extends Application {
@@ -25,6 +29,7 @@ public class ProgramWindow extends Application {
     private String PROGRAM_TITLE = "Fuzzy-Logic Chess Program";
 
 
+    private int debugValue = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -85,16 +90,59 @@ public class ProgramWindow extends Application {
 
     public Canvas createCanvas() {
         Canvas canvas = new Canvas(WINDOW_WIDTH+16,WINDOW_HEIGHT);
-        // TODO move these to a HumanController
         canvas.setOnMouseMoved(event -> {
 
         });
 
         canvas.setOnMouseClicked(event -> {
+            System.out.println("Bees");
 
+            switch(debugValue) {
+                case 0:
+                    GamePiece gamePiece = gameState.getGameBoard().getPiece(0,6);
+                    ArrayList<Action> actions = gameState.getValidActions(gamePiece);
+                    for(Action action: actions) {
+                        System.out.println(action);
+                    }
+                    break;
+                case 1:
+
+
+                    break;
+                case 2:
+
+
+                    break;
+                case 3:
+
+
+                    break;
+            }
         });
         canvas.setOnKeyPressed(keyEvent -> {
             System.out.println("Bees");
+
+            switch(debugValue) {
+                case 0:
+                    GamePiece gamePiece = gameState.getGameBoard().getPiece(0,6);
+                    ArrayList<Action> actions = gameState.getValidActions(gamePiece);
+                    for(Action action: actions) {
+                        System.out.println(action);
+                    }
+                    break;
+                case 1:
+
+
+                    break;
+                case 2:
+
+
+                    break;
+                case 3:
+
+
+                    break;
+            }
         });
         return canvas;
     }

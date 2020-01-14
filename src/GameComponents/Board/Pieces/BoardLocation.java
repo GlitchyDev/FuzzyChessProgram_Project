@@ -44,4 +44,9 @@ public class BoardLocation {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
 }

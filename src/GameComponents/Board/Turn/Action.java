@@ -1,5 +1,6 @@
 package GameComponents.Board.Turn;
 
+import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.GamePiece;
 
 public abstract class Action {
@@ -18,6 +19,12 @@ public abstract class Action {
     public ActionType getActionType() {
         return actionType;
     }
+
+    public abstract void preformAction(GameBoard gameBoard);
+    public abstract void undoAction(GameBoard gameBoard);
+
+
+
     // Piece
     // Action
 }

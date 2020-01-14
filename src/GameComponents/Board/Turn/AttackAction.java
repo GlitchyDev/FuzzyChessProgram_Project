@@ -1,5 +1,6 @@
 package GameComponents.Board.Turn;
 
+import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 
@@ -32,5 +33,22 @@ public class AttackAction extends Action {
 
     public BoardLocation getNewLocation() {
         return newLocation;
+    }
+
+    @Override
+    public void preformAction(GameBoard gameBoard) {
+        gameBoard.deletePiece(newLocation);
+        gameBoard.movePiece(oldLocation,newLocation);
+    }
+
+    @Override
+    public void undoAction(GameBoard gameBoard) {
+        gameBoard.movePiece(newLocation,oldLocation);
+        gameBoard.addPiece(targetPiece,newLocation);
+    }
+
+    @Override
+    public String toString() {
+        return "{ATTACK " + getActionType() + " of " + getGamePiece() + " at " + oldLocation + " attacking " + getTargetPiece() + " at " + newLocation + "}";
     }
 }

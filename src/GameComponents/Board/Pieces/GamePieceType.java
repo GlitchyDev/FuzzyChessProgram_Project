@@ -18,6 +18,7 @@ public enum GamePieceType {
         availableActions.add(ActionType.MOVEMENT_STANDARD);
         switch(this) {
             case PAWN:
+                availableActions.add(ActionType.MOVEMENT_PAWN_ADVANCE);
                 availableActions.add(ActionType.ATTACK_PAWN);
                 availableActions.add(ActionType.ATTACK_PAWN_EN_PASSANT);
                 break;
@@ -40,6 +41,7 @@ public enum GamePieceType {
                 break;
             case KING:
                 availableActions.add(ActionType.ATTACK_KNIGHT);
+                availableActions.add(ActionType.ATTACK_KING);
                 break;
         }
 
