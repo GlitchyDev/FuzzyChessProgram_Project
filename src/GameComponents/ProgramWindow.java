@@ -91,6 +91,10 @@ public class ProgramWindow extends Application {
         return menuBar;
     }
 
+
+    private final int selectedPieceX = 1;
+    private final int selectedPieceY = 7;
+
     public Canvas createCanvas() {
         Canvas canvas = new Canvas(WINDOW_WIDTH+16,WINDOW_HEIGHT);
         canvas.setOnMouseMoved(event -> {
@@ -101,7 +105,7 @@ public class ProgramWindow extends Application {
             System.out.println("Bees");
 
             if (event.getButton() == MouseButton.PRIMARY) {
-                GamePiece gamePiece = boardLocation == null ? gameState.getGameBoard().getPiece(0,6) : gameState.getGameBoard().getPiece(boardLocation);
+                GamePiece gamePiece = boardLocation == null ? gameState.getGameBoard().getPiece(selectedPieceX,selectedPieceY) : gameState.getGameBoard().getPiece(boardLocation);
                 ArrayList<Action> actions = gameState.getValidActions(gamePiece);
                 for(Action action: actions) {
                     System.out.println(action);
@@ -109,23 +113,15 @@ public class ProgramWindow extends Application {
             }
 
             if (event.getButton() == MouseButton.SECONDARY) {
-                if (debugValue == 0) {
-                    GamePiece gamePiece = gameState.getGameBoard().getPiece(0, 6);
-                    ArrayList<Action> actions = gameState.getValidActions(gamePiece);
-                    for (Action action : actions) {
-                        System.out.println(action);
-                    }
-                    gameState.preformAction(actions.get(0));
-                    boardLocation = actions.get(0).getGamePiece().getBoardLocation();
-                } else {
-                    GamePiece gamePiece1 = gameState.getGameBoard().getPiece(boardLocation);
-                    ArrayList<Action> actions1 = gameState.getValidActions(gamePiece1);
-                    for(Action action: actions1) {
-                        System.out.println(action);
-                    }
-                    gameState.preformAction(actions1.get(0));
-                    boardLocation = actions1.get(0).getGamePiece().getBoardLocation();
+
+                GamePiece gamePiece1 = boardLocation == null ? gameState.getGameBoard().getPiece(selectedPieceX, selectedPieceY) : gameState.getGameBoard().getPiece(boardLocation);
+                ArrayList<Action> actions1 = gameState.getValidActions(gamePiece1);
+                for(Action action: actions1) {
+                    System.out.println(action);
                 }
+                gameState.preformAction(actions1.get(0));
+                boardLocation = actions1.get(0).getGamePiece().getBoardLocation();
+
                 System.out.println(gameState.getGameBoard());
 
                 debugValue++;

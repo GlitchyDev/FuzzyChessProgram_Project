@@ -37,14 +37,18 @@ public class AttackAction extends Action {
 
     @Override
     public void preformAction(GameBoard gameBoard) {
-        gameBoard.deletePiece(newLocation);
-        gameBoard.movePiece(oldLocation,newLocation);
+        if(isSuccessful) {
+            gameBoard.deletePiece(newLocation);
+            gameBoard.movePiece(oldLocation, newLocation);
+        }
     }
 
     @Override
     public void undoAction(GameBoard gameBoard) {
-        gameBoard.movePiece(newLocation,oldLocation);
-        gameBoard.addPiece(targetPiece,newLocation);
+        if(isSuccessful) {
+            gameBoard.movePiece(newLocation, oldLocation);
+            gameBoard.addPiece(targetPiece, newLocation);
+        }
     }
 
     @Override

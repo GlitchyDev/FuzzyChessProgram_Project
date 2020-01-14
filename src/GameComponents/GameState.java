@@ -110,48 +110,48 @@ public class GameState {
                     break;
                 case MOVEMENT_KNIGHT:
                     final BoardLocation[][] knightMovements = new BoardLocation[][]{
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(1,3)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(-1,3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(1, 2)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(1, 2)},
 
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(1,-3)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(-1,-3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(1,-2)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(1,-2)},
 
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,1)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,-1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(2,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(2,1)},
 
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,1)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,-1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-2,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-2,1)},
                     };
 
 
                     for(int i = 0; i < knightMovements.length; i++) {
-                        if(gameBoard.isInsideBoard(knightMovements[i][3])) {
-                            if (!gameBoard.isSpaceOccupied(knightMovements[i][3])) {
-                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),knightMovements[i][3]));
+                        if(gameBoard.isInsideBoard(knightMovements[i][2])) {
+                            if (!gameBoard.isSpaceOccupied(knightMovements[i][2])) {
+                                validActions.add(new MovementAction(gamePiece,ActionType.MOVEMENT_KNIGHT,gamePiece.getBoardLocation(),knightMovements[i][2]));
                             }
                         }
                     }
                     break;
                 case ATTACK_KNIGHT:
                     final BoardLocation[][] knightAttacks = new BoardLocation[][]{
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(1,3)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(0,3),gamePiece.getBoardLocation().getOffsetLocation(-1,3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(1, 2)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,1),gamePiece.getBoardLocation().getOffsetLocation(0,2),gamePiece.getBoardLocation().getOffsetLocation(1, 2)},
 
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(1,-3)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(0,-3),gamePiece.getBoardLocation().getOffsetLocation(-1,-3)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(1,-2)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(0,-1),gamePiece.getBoardLocation().getOffsetLocation(0,-2),gamePiece.getBoardLocation().getOffsetLocation(1,-2)},
 
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,1)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(3,0),gamePiece.getBoardLocation().getOffsetLocation(3,-1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(2,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(1,0),gamePiece.getBoardLocation().getOffsetLocation(2,0),gamePiece.getBoardLocation().getOffsetLocation(2,1)},
 
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,1)},
-                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-3,0),gamePiece.getBoardLocation().getOffsetLocation(-3,-1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-2,1)},
+                            new BoardLocation[]{gamePiece.getBoardLocation().getOffsetLocation(-1,0),gamePiece.getBoardLocation().getOffsetLocation(-2,0),gamePiece.getBoardLocation().getOffsetLocation(-2,1)},
                     };
 
 
                     for(int i = 0; i < knightAttacks.length; i++) {
-                        if(gameBoard.isInsideBoard(knightAttacks[i][3])) {
-                            if (gameBoard.isSpaceOccupied(knightAttacks[i][3])) {
-                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),knightAttacks[i][3]));
+                        if(gameBoard.isInsideBoard(knightAttacks[i][2])) {
+                            if (gameBoard.isSpaceOccupied(knightAttacks[i][2]) && gameBoard.getPiece(knightAttacks[i][2]).getGameTeam() != gamePiece.getGameTeam()) {
+                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_KNIGHT,gamePiece.getBoardLocation(),knightAttacks[i][2]));
                             }
                         }
                     }                    break;
@@ -182,7 +182,7 @@ public class GameState {
                                         passCount++;
                                     }
                                 } else {
-                                    if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
+                                    if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)).getGameTeam() != gamePiece.getGameTeam()) {
                                         passCount++;
                                     }
                                 }
@@ -223,7 +223,7 @@ public class GameState {
                                         passCount++;
                                     }
                                 } else {
-                                    if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
+                                    if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)).getGameTeam() != gamePiece.getGameTeam()) {
                                         passCount++;
                                     }
                                 }
@@ -261,7 +261,7 @@ public class GameState {
                                         passCount++;
                                     }
                                 } else {
-                                    if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
+                                    if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)).getGameTeam() != gamePiece.getGameTeam()) {
                                         passCount++;
                                     }
                                 }
@@ -278,7 +278,7 @@ public class GameState {
                 case ATTACK_KING:
                     for(BoardDirection boardDirection: BoardDirection.values()) {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
-                            if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
+                            if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
                                 validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KING,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), false));
                             }
                         }
