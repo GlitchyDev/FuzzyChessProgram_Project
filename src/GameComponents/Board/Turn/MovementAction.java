@@ -3,6 +3,7 @@ package GameComponents.Board.Turn;
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.GameState;
 
 public class MovementAction extends Action {
     private final BoardLocation oldLocation;
@@ -32,6 +33,17 @@ public class MovementAction extends Action {
     public void undoAction(GameBoard gameBoard) {
         gameBoard.movePiece(newLocation,oldLocation);
         getGamePiece().setBoardLocation(oldLocation);
+    }
+
+
+    /**
+     * This Method will make a copy of the action that is actionable ( aka pointing to the right pieces ) on a new GameState
+     * @param newGameState
+     * @return
+     */
+    @Override
+    public Action clone(GameState newGameState) {
+        return new MovementAction(newGameState.getGameBoard().getPiece(getGamePiece().getBoardLocation()),getActionType(),oldLocation,newLocation);
     }
 
     @Override

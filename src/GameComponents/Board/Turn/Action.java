@@ -2,7 +2,11 @@ package GameComponents.Board.Turn;
 
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.GameState;
 
+/**
+ * A class that represents any given action that can be taken on a Piece
+ */
 public abstract class Action {
     private GamePiece gamePiece;
     private final ActionType actionType;
@@ -20,12 +24,19 @@ public abstract class Action {
         return actionType;
     }
 
+    /**
+     * Preforms the given action to the GameBoard provided
+     * @param gameBoard
+     */
     public abstract void preformAction(GameBoard gameBoard);
+
+    /**
+     * Undo's the given action to the GameBoard provided
+     * @param gameBoard
+     */
     public abstract void undoAction(GameBoard gameBoard);
 
-    public void branchSubstitute(GamePiece gamePiece) {
-        this.gamePiece = gamePiece;
-    }
+    public abstract Action clone(GameState gameState);
 
     // Piece
     // Action

@@ -13,6 +13,9 @@ import GameComponents.Board.Turn.MovementAction;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * A Wrapper Object that holds the GameBoard, and tracks all actions done. It allows for easy branching and cloning to show all possibilities
+ */
 public class GameState {
     private final int ACTIONS_PER_TURN = 2;
     private GameBoard gameBoard;
@@ -28,6 +31,11 @@ public class GameState {
         this.currentTurnNumber = 1;
     }
 
+    /**
+     * A constructor specifically used to create a Clone GameState from a Donor GameState and a Branching Action
+     * @param originalGameState
+     * @param branchingAction
+     */
     public GameState(GameState originalGameState, Action branchingAction) {
         this.gameBoard = originalGameState.getGameBoard().clone();
         this.currentTeamTurn = originalGameState.getCurrentTeamTurn();
@@ -36,12 +44,15 @@ public class GameState {
             pastActions.add(action);
         }
         this.currentTurnNumber = originalGameState.getCurrentTurnNumber();
-        branchingAction.branchSubstitute(gameBoard.getPiece(branchingAction.getGamePiece().getBoardLocation()));
-        preformAction(branchingAction);
+        preformAction(branchingAction.clone(this));
     }
 
 
-
+    /**
+     * Retrieve all Actions taken at the specified Turn Number
+     * @param turnNumber
+     * @return
+     */
     public ArrayList<Action> getTurnActions(int turnNumber) {
         ArrayList<Action> turnsActions = new ArrayList<>();
         int actionOffset = (turnNumber-1) * 2;
@@ -305,6 +316,11 @@ public class GameState {
         return validActions;
     }
 
+
+    /**
+     * Executes the current action, and modifies the turn counter as required
+     * @param action
+     */
     public void preformAction(Action action) {
         action.preformAction(gameBoard);
         pastActions.add(action);
@@ -313,7 +329,19 @@ public class GameState {
         }
     }
 
-    public void switchTurn() {
+    /**
+     * Undo's the action, it will only work if this action is back-front linear
+     * @param action
+     */
+    public void undoAction(Action action) {
+        action.undoAction(gameBoard);
+        pastActions.remove(action);
+        if(pastActions.size() % ACTIONS_PER_TURN == 0) {
+            switchTurn();
+        }
+    }
+
+    private void switchTurn() {
         currentTeamTurn = getNextTeamTurn();
         currentTurnNumber++;
     }

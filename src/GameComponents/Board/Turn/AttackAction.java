@@ -3,6 +3,7 @@ package GameComponents.Board.Turn;
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.GameState;
 
 public class AttackAction extends Action {
     private final GamePiece targetPiece;
@@ -49,6 +50,16 @@ public class AttackAction extends Action {
             gameBoard.movePiece(newLocation, oldLocation);
             gameBoard.addPiece(targetPiece, newLocation);
         }
+    }
+
+    /**
+     * This Method will make a copy of the action that is actionable ( aka pointing to the right pieces ) on a new GameState
+     * @param newGameState
+     * @return
+     */
+    @Override
+    public Action clone(GameState newGameState) {
+        return new AttackAction(newGameState.getGameBoard().getPiece(getGamePiece().getBoardLocation()),getActionType(),newGameState.getGameBoard().getPiece(getTargetPiece().getBoardLocation()),isSuccessful);
     }
 
     @Override

@@ -3,6 +3,10 @@ package GameComponents;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * This class specifically handles all GUI rendering for a Game Window. In the future this class will need to account
+ * for window resizing to properly render to new size
+ */
 public class GUIRenderer {
     private final double canvasWidth;
     private final double canvasHeight;

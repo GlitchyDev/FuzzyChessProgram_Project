@@ -6,6 +6,9 @@ import GameComponents.Board.Pieces.GamePieceType;
 
 import java.util.ArrayList;
 
+/**
+ * A Wrapper Object that stores the Current Board States and Pieces, and makes moving and deleting/adding pieces reliable
+ */
 public class GameBoard {
     private final int BOARD_WIDTH = 8;
     private final int BOARD_HEIGHT = 8;
