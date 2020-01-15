@@ -20,11 +20,27 @@ public class GameState {
     private ArrayList<Action> pastActions;
     private int currentTurnNumber;
 
+
+
     public GameState() {
         this.gameBoard = new GameBoard();
         this.pastActions = new ArrayList<>();
         this.currentTurnNumber = 1;
     }
+
+    public GameState(GameState originalGameState, Action branchingAction) {
+        this.gameBoard = originalGameState.getGameBoard().clone();
+        this.currentTeamTurn = originalGameState.getCurrentTeamTurn();
+        this.pastActions = new ArrayList<>();
+        for(Action action: originalGameState.getPastActions()) {
+            pastActions.add(action);
+        }
+        this.currentTurnNumber = originalGameState.getCurrentTurnNumber();
+        branchingAction.branchSubstitute(gameBoard.getPiece(branchingAction.getGamePiece().getBoardLocation()));
+        preformAction(branchingAction);
+    }
+
+
 
     public ArrayList<Action> getTurnActions(int turnNumber) {
         ArrayList<Action> turnsActions = new ArrayList<>();
@@ -299,6 +315,7 @@ public class GameState {
 
     public void switchTurn() {
         currentTeamTurn = getNextTeamTurn();
+        currentTurnNumber++;
     }
 
     public GameTeam getNextTeamTurn() {
@@ -318,5 +335,23 @@ public class GameState {
 
     public GameTeam getCurrentTeamTurn() {
         return currentTeamTurn;
+    }
+
+    public ArrayList<Action> getPastActions() {
+        return pastActions;
+    }
+
+    public int getCurrentTurnNumber() {
+        return currentTurnNumber;
+    }
+
+    public GameState branchState(Action branchingAction) {
+        return new GameState(this,branchingAction);
+    }
+
+    @Override
+    public String toString() {
+        return "GameState: Turn: " + currentTurnNumber + "\n" + gameBoard;
+
     }
 }
