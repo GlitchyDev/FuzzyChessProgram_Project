@@ -104,28 +104,11 @@ public class ProgramWindow extends Application {
         canvas.setOnMouseClicked(event -> {
 
             if (event.getButton() == MouseButton.PRIMARY) {
-                GamePiece gamePiece = boardLocation == null ? gameState.getGameBoard().getPiece(selectedPieceX,selectedPieceY) : gameState.getGameBoard().getPiece(boardLocation);
-                ArrayList<Action> actions = gameState.getValidActions(gamePiece);
-                String debugString = "";
-                for(Action action: actions) {
-                    debugString += action.toString() + "\n";
-                }
-                guiRenderer.setDebugString(debugString);
-
                 playerController.checkMouseLeftClick((int)event.getX(),(int)event.getY());
             }
 
             if (event.getButton() == MouseButton.SECONDARY) {
-                GamePiece gamePiece1 = boardLocation == null ? gameState.getGameBoard().getPiece(selectedPieceX, selectedPieceY) : gameState.getGameBoard().getPiece(boardLocation);
-                ArrayList<Action> actions1 = gameState.getValidActions(gamePiece1);
-                for(Action action: actions1) {
-                    System.out.println(action);
-                }
-                if(actions1.size() > 0) {
-                    gameState.preformAction(actions1.get(0));
-                    boardLocation = actions1.get(0).getGamePiece().getBoardLocation();
-                }
-
+                playerController.checkMouseRightClick((int)event.getX(),(int)event.getY());
             }
         });
         canvas.setOnKeyPressed(keyEvent -> {

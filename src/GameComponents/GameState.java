@@ -135,32 +135,14 @@ public class GameState {
             case ATTACK_PAWN_EN_PASSANT:
                 // TODO See if teacher is requring it, if so check the Turn Log for last turn, see if a pawn advanced, if the current piece is in the right now
                 // If the pawn in question is in a valid position
+                break;
             case ATTACK_PAWN:
-                switch(gamePiece.getGameTeam()) {
-                    case WHITE:
-                        if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1))) {
-                            if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1))  && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_EAST,1)));
-                            }
+                for(BoardDirection boardDirection: BoardDirection.values()) {
+                    if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
+                        if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
+                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_PAWN,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), true));
                         }
-                        if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1))) {
-                            if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.NORTH_WEST,1)));
-                            }
-                        }
-                        break;
-                    case BLACK:
-                        if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1)) ) {
-                            if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1))  && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_EAST,1)));
-                            }
-                        }
-                        if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1))) {
-                            if (gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1))  && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                                validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_PAWN,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(BoardDirection.SOUTH_WEST,1)));
-                            }
-                        }
-                        break;
+                    }
                 }
                 break;
             case MOVEMENT_KNIGHT:
@@ -191,7 +173,7 @@ public class GameState {
                 for(BoardDirection boardDirection: BoardDirection.values()) {
                     if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
                         if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KNIGHT,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), false));
+                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KNIGHT,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), true));
                         }
                     }
                 }
@@ -230,7 +212,7 @@ public class GameState {
                         }
                     }
                     if(passCount == BISHOP_ATTACK_LENGTH) {
-                        validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_BISHOP,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(boardDirection,BISHOP_ATTACK_LENGTH)));
+                        validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_BISHOP,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,BISHOP_ATTACK_LENGTH)), true));
                     }
                 }
                 break;
@@ -271,12 +253,12 @@ public class GameState {
                         }
                     }
                     if(passCount == ROOK_ATTACK_LENGTH) {
-                        validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_ROOK,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(boardDirection,ROOK_ATTACK_LENGTH)));
+                        validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_ROOK,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,ROOK_ATTACK_LENGTH)), true));
                     }
                 }
                 break;
             case MOVEMENT_QUEEN:
-                final int QUEEN_MOVEMENT_LENGTH = 3;
+                final int QUEEN_MOVEMENT_LENGTH = 5;
                 for(BoardDirection boardDirection: BoardDirection.values()) {
                     int passCount = 0;
                     for (int i = 1; i <= QUEEN_MOVEMENT_LENGTH; i++) {
@@ -309,7 +291,7 @@ public class GameState {
                         }
                     }
                     if(passCount == QUEEN_ATTACK_LENGTH) {
-                        validActions.add(new MovementAction(gamePiece,ActionType.ATTACK_ROOK,gamePiece.getBoardLocation(),gamePiece.getBoardLocation().getDirectionLocation(boardDirection,QUEEN_ATTACK_LENGTH)));
+                        validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_QUEEN,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,QUEEN_ATTACK_LENGTH)), true));
                     }
                 }
                 break;

@@ -35,12 +35,15 @@ public class GUIRenderer {
     private String debugString = "";
     private final int DEBUG_TEXTOFFSET = 440;
     private final Color DEBUG_COLOR = Color.LIME;
+    private final int DEBUG_CORDOFFSET = 10;
 
     // Selected Pieces
     private final ArrayList<BoardLocation> selectedPieces;
-    private final ArrayList<BoardLocation> selectedAreas;
+    private final ArrayList<BoardLocation> selectedMoveAreas;
+    private final ArrayList<BoardLocation> selectedAttackAreas;
     private final Color SELECTED_PIECE_COLOR = Color.AQUA;
-    private final Color SELECTED_AREA_COLOR = Color.GREEN;
+    private final Color SELECTED_MOVE_COLOR = Color.GREEN;
+    private final Color SELECTED_ATTACK_COLOR = Color.RED;
     private final double SELECTED_OPACITY = 0.5;
 
 
@@ -57,7 +60,8 @@ public class GUIRenderer {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         selectedPieces = new ArrayList<>();
-        selectedAreas = new ArrayList<>();
+        selectedMoveAreas = new ArrayList<>();
+        selectedAttackAreas = new ArrayList<>();
     }
 
 
@@ -83,13 +87,22 @@ public class GUIRenderer {
 
             }
         }
-        if(selectedAreas.size() > 0) {
-            for(BoardLocation boardLocation: selectedAreas) {
+        gc.setFill(SELECTED_MOVE_COLOR);
+        if(selectedMoveAreas.size() > 0) {
+            for(BoardLocation boardLocation: selectedMoveAreas) {
+                gc.fillRect(BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + boardLocation.getX() * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + boardLocation.getY() * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+
+            }
+        }
+        gc.setFill(SELECTED_ATTACK_COLOR);
+        if(selectedAttackAreas.size() > 0) {
+            for(BoardLocation boardLocation: selectedAttackAreas) {
                 gc.fillRect(BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + boardLocation.getX() * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + boardLocation.getY() * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
 
             }
         }
         gc.setGlobalAlpha(1.0);
+
 
 
         gc.setFill(DEBUG_COLOR);
@@ -109,11 +122,12 @@ public class GUIRenderer {
             }
             isBlack = !isBlack;
         }
+        renderDebugCords(gc);
 
-        debugRenderPieces(gc);
+        renderGamePieces(gc);
     }
 
-    private void debugRenderPieces(GraphicsContext gc) {
+    private void renderGamePieces(GraphicsContext gc) {
         for(GamePiece gamePiece: gameState.getGameBoard().getBlackPieces()) {
             renderPiece(gc,gamePiece);
         }
@@ -129,6 +143,15 @@ public class GUIRenderer {
         gc.fillText(gamePiece.getGamePieceType().toString(),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH + PIECE_TEXTOFFSET);
     }
 
+    private void renderDebugCords(GraphicsContext gc) {
+        gc.setFill(DEBUG_COLOR);
+        for(int y = 0; y < 8; y++) {
+            for(int x = 0; x < 8; x++) {
+                gc.fillText(x + "," + y,BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH + DEBUG_CORDOFFSET);
+            }
+        }
+    }
+
     public void setDebugString(String debugString) {
         this.debugString = debugString;
     }
@@ -137,8 +160,12 @@ public class GUIRenderer {
         return debugString;
     }
 
-    public ArrayList<BoardLocation> getSelectedAreas() {
-        return selectedAreas;
+    public ArrayList<BoardLocation> getSelectedMoveAreas() {
+        return selectedMoveAreas;
+    }
+
+    public ArrayList<BoardLocation> getSelectedAttackAreas() {
+        return selectedAttackAreas;
     }
 
     public ArrayList<BoardLocation> getSelectedPieces() {

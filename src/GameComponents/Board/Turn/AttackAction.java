@@ -41,6 +41,7 @@ public class AttackAction extends Action {
         if(isSuccessful) {
             gameBoard.deletePiece(newLocation);
             gameBoard.movePiece(oldLocation, newLocation);
+            getGamePiece().setBoardLocation(newLocation);
         }
     }
 
