@@ -302,7 +302,7 @@ public class GameState {
                 for(BoardDirection boardDirection: BoardDirection.values()) {
                     if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
                         if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KING,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), false));
+                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KING,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), true));
                         }
                     }
                 }
