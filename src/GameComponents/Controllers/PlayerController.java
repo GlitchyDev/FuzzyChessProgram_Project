@@ -64,7 +64,7 @@ public class PlayerController {
                 System.out.println("Board location is selected");
                 if(actionMoveSet.size() > 0) {
                     for(BoardLocation boardLocation: actionMoveSet.keySet()) {
-                        if(boardLocation.getX() == canvasX && boardLocation.getY() == canvasY) {
+                        if(boardLocation.getX() == squareX && boardLocation.getY() == squareY) {
                             System.out.println("We did stuff yay!");
                             gameState.preformAction(actionMoveSet.get(boardLocation));
                             break;
