@@ -16,6 +16,55 @@ public enum ActionType {
     MOVEMENT_QUEEN, // 5 Squares any Direction
     ATTACK_QUEEN, // 5 Squares any Direction
     MOVEMENT_CASTLE_KING, // Castle movement for King
-    ATTACK_KING,
+    ATTACK_KING
+
+    ;
+
+
+    public boolean isAttack() {
+        switch(this) {
+            case MOVEMENT_STANDARD:
+            case MOVEMENT_PAWN_ADVANCE:
+            case MOVEMENT_KNIGHT:
+            case MOVEMENT_BISHOP:
+            case MOVEMENT_ROOK:
+            case MOVEMENT_CASTLE_ROOK:
+            case MOVEMENT_QUEEN:
+            case MOVEMENT_CASTLE_KING:
+                return false;
+            case ATTACK_PAWN:
+            case ATTACK_PAWN_EN_PASSANT:
+            case ATTACK_KNIGHT:
+            case ATTACK_BISHOP:
+            case ATTACK_ROOK:
+            case ATTACK_QUEEN:
+            case ATTACK_KING:
+                return true;
+        }
+        return Boolean.parseBoolean(null);
+    }
+
+    public boolean isMovement() {
+        switch(this) {
+            case MOVEMENT_STANDARD:
+            case MOVEMENT_PAWN_ADVANCE:
+            case MOVEMENT_KNIGHT:
+            case MOVEMENT_BISHOP:
+            case MOVEMENT_ROOK:
+            case MOVEMENT_CASTLE_ROOK:
+            case MOVEMENT_QUEEN:
+            case MOVEMENT_CASTLE_KING:
+                return true;
+            case ATTACK_PAWN:
+            case ATTACK_PAWN_EN_PASSANT:
+            case ATTACK_KNIGHT:
+            case ATTACK_BISHOP:
+            case ATTACK_ROOK:
+            case ATTACK_QUEEN:
+            case ATTACK_KING:
+                return false;
+        }
+        return Boolean.parseBoolean(null);
+    }
 
 }

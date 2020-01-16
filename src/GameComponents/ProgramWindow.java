@@ -26,18 +26,16 @@ public class ProgramWindow extends Application {
     private PlayerController playerController;
 
     // Window Customization Options
-    private final int WINDOW_WIDTH = 500;
-    private final int WINDOW_HEIGHT = 500;
+    private final int WINDOW_WIDTH = 600;
+    private final int WINDOW_HEIGHT = 600;
     private String PROGRAM_TITLE = "Fuzzy-Logic Chess Program";
 
 
-    private int debugValue = 0;
     private BoardLocation boardLocation;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.fileLoader = new FileLoader();
-        this.playerController = new PlayerController();
         this.gameState = new GameState();
 
 
@@ -54,7 +52,9 @@ public class ProgramWindow extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         // Bind after Canvas creation to get proper sizings
-        this.guiRenderer = new GUIRenderer(canvas.getWidth(),canvas.getHeight());
+        this.guiRenderer = new GUIRenderer(gameState, canvas.getWidth(),canvas.getHeight());
+        this.playerController = new PlayerController(gameState, guiRenderer);
+
 
         primaryStage.show();
 
@@ -102,55 +102,35 @@ public class ProgramWindow extends Application {
         });
 
         canvas.setOnMouseClicked(event -> {
-            System.out.println("Bees");
 
             if (event.getButton() == MouseButton.PRIMARY) {
                 GamePiece gamePiece = boardLocation == null ? gameState.getGameBoard().getPiece(selectedPieceX,selectedPieceY) : gameState.getGameBoard().getPiece(boardLocation);
                 ArrayList<Action> actions = gameState.getValidActions(gamePiece);
+                String debugString = "";
                 for(Action action: actions) {
-                    System.out.println(action);
+                    debugString += action.toString() + "\n";
                 }
+                guiRenderer.setDebugString(debugString);
+
+                playerController.checkMouseLeftClick((int)event.getX(),(int)event.getY());
             }
 
             if (event.getButton() == MouseButton.SECONDARY) {
-
                 GamePiece gamePiece1 = boardLocation == null ? gameState.getGameBoard().getPiece(selectedPieceX, selectedPieceY) : gameState.getGameBoard().getPiece(boardLocation);
                 ArrayList<Action> actions1 = gameState.getValidActions(gamePiece1);
                 for(Action action: actions1) {
                     System.out.println(action);
                 }
-                gameState.preformAction(actions1.get(0));
-                boardLocation = actions1.get(0).getGamePiece().getBoardLocation();
+                if(actions1.size() > 0) {
+                    gameState.preformAction(actions1.get(0));
+                    boardLocation = actions1.get(0).getGamePiece().getBoardLocation();
+                }
 
-                System.out.println(gameState.getGameBoard());
-
-                debugValue++;
             }
         });
         canvas.setOnKeyPressed(keyEvent -> {
-            System.out.println("Bees");
-
-            switch(debugValue) {
-                case 0:
-                    GamePiece gamePiece = gameState.getGameBoard().getPiece(0,6);
-                    ArrayList<Action> actions = gameState.getValidActions(gamePiece);
-                    for(Action action: actions) {
-                        System.out.println(action);
-                    }
-                    break;
-                case 1:
 
 
-                    break;
-                case 2:
-
-
-                    break;
-                case 3:
-
-
-                    break;
-            }
         });
         return canvas;
     }

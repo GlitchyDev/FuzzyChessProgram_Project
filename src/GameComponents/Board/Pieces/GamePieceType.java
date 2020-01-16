@@ -47,4 +47,33 @@ public enum GamePieceType {
 
         return availableActions;
     }
+
+
+    public boolean canAttackTwice() {
+        switch(this) {
+            case KNIGHT:
+                return true;
+            case PAWN:
+            case BISHOP:
+            case ROOK:
+            case QUEEN:
+            case KING:
+                return false;
+        }
+        return Boolean.parseBoolean(null);
+    }
+
+    public boolean canMoveTwice() {
+        switch(this) {
+            case BISHOP:
+            case ROOK:
+            case QUEEN:
+                return true;
+            case PAWN:
+            case KNIGHT:
+            case KING:
+                return false;
+        }
+        return Boolean.parseBoolean(null);
+    }
 }
