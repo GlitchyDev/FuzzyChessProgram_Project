@@ -1,5 +1,6 @@
 package GameComponents.Controllers;
 
+import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
@@ -25,55 +26,57 @@ public class PlayerController {
     }
 
     public void checkMouseLeftClick(int canvasX, int canvasY) {
-        // Check if its actually inside the damn thing
-        if(canvasX >= GUIRenderer.BOARD_X_OFFSET && canvasY >= GUIRenderer.BOARD_Y_OFFSET && canvasX <= GUIRenderer.BOARD_X_OFFSET + GUIRenderer.BOARD_LENGTH && canvasY <= GUIRenderer.BOARD_Y_OFFSET + GUIRenderer.BOARD_LENGTH) {
-            int squareX = (canvasX-GUIRenderer.BOARD_X_OFFSET)/GUIRenderer.PIECE_LENGTH;
-            int squareY = (canvasY-GUIRenderer.BOARD_Y_OFFSET)/GUIRenderer.PIECE_LENGTH;
+        if(!gameState.isUseAIMode() || gameState.getCurrentTeamTurn() == GameTeam.WHITE) {
+            // Check if its actually inside the damn thing
+            if (canvasX >= GUIRenderer.BOARD_X_OFFSET && canvasY >= GUIRenderer.BOARD_Y_OFFSET && canvasX <= GUIRenderer.BOARD_X_OFFSET + GUIRenderer.BOARD_LENGTH && canvasY <= GUIRenderer.BOARD_Y_OFFSET + GUIRenderer.BOARD_LENGTH) {
+                int squareX = (canvasX - GUIRenderer.BOARD_X_OFFSET) / GUIRenderer.PIECE_LENGTH;
+                int squareY = (canvasY - GUIRenderer.BOARD_Y_OFFSET) / GUIRenderer.PIECE_LENGTH;
 
-            if(boardLocation == null) {
-                if (gameState.getGameBoard().isSpaceOccupied(squareX, squareY)) {
-                    GamePiece selectedPiece = gameState.getGameBoard().getPiece(squareX, squareY);
-                    this.boardLocation = selectedPiece.getBoardLocation();
+                if (boardLocation == null) {
+                    if (gameState.getGameBoard().isInsideBoard(squareX, squareY) && gameState.getGameBoard().isSpaceOccupied(squareX, squareY)) {
+                        GamePiece selectedPiece = gameState.getGameBoard().getPiece(squareX, squareY);
+                        this.boardLocation = selectedPiece.getBoardLocation();
 
-                    guiRenderer.getSelectedPieces().clear();
-                    guiRenderer.getSelectedMoveAreas().clear();
-                    guiRenderer.getSelectedAttackAreas().clear();
-                    guiRenderer.getSelectedPieces().add(selectedPiece.getBoardLocation());
+                        guiRenderer.getSelectedPieces().clear();
+                        guiRenderer.getSelectedMoveAreas().clear();
+                        guiRenderer.getSelectedAttackAreas().clear();
+                        guiRenderer.getSelectedPieces().add(selectedPiece.getBoardLocation());
 
-                    ArrayList<Action> possibleActions = gameState.getValidActions(selectedPiece);
-                    if (possibleActions.size() > 0) {
-                        for (Action action : possibleActions) {
-                            if (action instanceof MovementAction) {
-                                guiRenderer.getSelectedMoveAreas().add(((MovementAction) action).getNewLocation());
-                                actionMoveSet.put(((MovementAction) action).getNewLocation(),action);
+                        ArrayList<Action> possibleActions = gameState.getValidActions(selectedPiece);
+                        if (possibleActions.size() > 0) {
+                            for (Action action : possibleActions) {
+                                if (action instanceof MovementAction) {
+                                    guiRenderer.getSelectedMoveAreas().add(((MovementAction) action).getNewLocation());
+                                    actionMoveSet.put(((MovementAction) action).getNewLocation(), action);
+                                }
+                                if (action instanceof AttackAction) {
+                                    guiRenderer.getSelectedAttackAreas().add(((AttackAction) action).getNewLocation());
+                                    actionMoveSet.put(((AttackAction) action).getNewLocation(), action);
+                                }
                             }
-                            if (action instanceof AttackAction) {
-                                guiRenderer.getSelectedAttackAreas().add(((AttackAction) action).getNewLocation());
-                                actionMoveSet.put(((AttackAction) action).getNewLocation(),action);
+                        }
+                    } else {
+                        guiRenderer.getSelectedPieces().clear();
+                        guiRenderer.getSelectedMoveAreas().clear();
+                        guiRenderer.getSelectedAttackAreas().clear();
+                        boardLocation = null;
+                        actionMoveSet.clear();
+                    }
+                } else {
+                    if (actionMoveSet.size() > 0) {
+                        for (BoardLocation boardLocation : actionMoveSet.keySet()) {
+                            if (boardLocation.getX() == squareX && boardLocation.getY() == squareY) {
+                                gameState.preformAction(actionMoveSet.get(boardLocation));
+                                break;
                             }
                         }
                     }
-                } else {
                     guiRenderer.getSelectedPieces().clear();
                     guiRenderer.getSelectedMoveAreas().clear();
                     guiRenderer.getSelectedAttackAreas().clear();
                     boardLocation = null;
                     actionMoveSet.clear();
                 }
-            } else {
-                if(actionMoveSet.size() > 0) {
-                    for(BoardLocation boardLocation: actionMoveSet.keySet()) {
-                        if(boardLocation.getX() == squareX && boardLocation.getY() == squareY) {
-                            gameState.preformAction(actionMoveSet.get(boardLocation));
-                            break;
-                        }
-                    }
-                }
-                guiRenderer.getSelectedPieces().clear();
-                guiRenderer.getSelectedMoveAreas().clear();
-                guiRenderer.getSelectedAttackAreas().clear();
-                boardLocation = null;
-                actionMoveSet.clear();
             }
         }
     }
@@ -81,22 +84,25 @@ public class PlayerController {
 
     public void checkMouseRightClick(int canvasX, int canvasY) {
         // Check if its actually inside the damn thing
-        if(canvasX >= GUIRenderer.BOARD_X_OFFSET && canvasY >= GUIRenderer.BOARD_Y_OFFSET && canvasX <= GUIRenderer.BOARD_X_OFFSET + GUIRenderer.BOARD_LENGTH && canvasY <= GUIRenderer.BOARD_Y_OFFSET + GUIRenderer.BOARD_LENGTH) {
-            int squareX = (canvasX - GUIRenderer.BOARD_X_OFFSET) / GUIRenderer.PIECE_LENGTH;
-            int squareY = (canvasY - GUIRenderer.BOARD_Y_OFFSET) / GUIRenderer.PIECE_LENGTH;
+        if (!gameState.isUseAIMode() || gameState.getCurrentTeamTurn() == GameTeam.WHITE) {
+
+            if (canvasX >= GUIRenderer.BOARD_X_OFFSET && canvasY >= GUIRenderer.BOARD_Y_OFFSET && canvasX <= GUIRenderer.BOARD_X_OFFSET + GUIRenderer.BOARD_LENGTH && canvasY <= GUIRenderer.BOARD_Y_OFFSET + GUIRenderer.BOARD_LENGTH) {
+                int squareX = (canvasX - GUIRenderer.BOARD_X_OFFSET) / GUIRenderer.PIECE_LENGTH;
+                int squareY = (canvasY - GUIRenderer.BOARD_Y_OFFSET) / GUIRenderer.PIECE_LENGTH;
 
 
-            if (gameState.getGameBoard().isSpaceOccupied(squareX, squareY)) {
-                GamePiece gamePiece = gameState.getGameBoard().getPiece(squareX, squareY);
+                if (gameState.getGameBoard().isSpaceOccupied(squareX, squareY)) {
+                    GamePiece gamePiece = gameState.getGameBoard().getPiece(squareX, squareY);
 
-                ArrayList<Action> actions = gameState.getValidActions(gamePiece);
-                String debugString = "";
-                for(Action action: actions) {
-                    debugString += action.toString() + "\n";
+                    ArrayList<Action> actions = gameState.getValidActions(gamePiece);
+                    String debugString = "";
+                    for (Action action : actions) {
+                        debugString += action.toString() + "\n";
+                    }
+                    guiRenderer.setDebugString(debugString);
+                } else {
+                    guiRenderer.setDebugString("");
                 }
-                guiRenderer.setDebugString(debugString);
-            }  else {
-                guiRenderer.setDebugString("");
             }
         }
     }

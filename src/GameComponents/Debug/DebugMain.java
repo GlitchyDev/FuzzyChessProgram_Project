@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DebugMain {
 
     public static void main(String[] args) {
-        GameState originalGamestate = new GameState();
+        GameState originalGamestate = new GameState(null);
         GamePiece origin = originalGamestate.getGameBoard().getPiece(new BoardLocation(0,1));
 
         ArrayList<Action> possibleActions = originalGamestate.getValidActions(origin);

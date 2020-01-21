@@ -107,6 +107,11 @@ public class GUIRenderer {
 
         gc.setFill(DEBUG_COLOR);
         gc.fillText(debugString,0,DEBUG_TEXTOFFSET);
+
+        if(gameState.isUseAIMode()) {
+            gc.setFill(DEBUG_COLOR);
+            gc.fillText("Using AI Mode",0,10);
+        }
     }
 
     public void renderBoard(GraphicsContext gc) {

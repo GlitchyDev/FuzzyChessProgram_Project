@@ -3,6 +3,7 @@ package GameComponents;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
+import GameComponents.Controllers.AIController;
 import GameComponents.Controllers.PlayerController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -24,6 +25,7 @@ public class ProgramWindow extends Application {
     private GameState gameState;
     private GUIRenderer guiRenderer;
     private PlayerController playerController;
+    private AIController aiController;
 
     // Window Customization Options
     private final int WINDOW_WIDTH = 600;
@@ -36,7 +38,8 @@ public class ProgramWindow extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.fileLoader = new FileLoader();
-        this.gameState = new GameState();
+        this.aiController = new AIController();
+        this.gameState = new GameState(aiController);
 
 
         // Create JAVAFX Visuals
@@ -58,8 +61,16 @@ public class ProgramWindow extends Application {
 
         primaryStage.show();
 
+        root.requestFocus();
+        // Add Debug Commands
+        root.setOnKeyPressed(keyEvent -> {
+            System.out.println(keyEvent.getCode().getChar());
+            if(keyEvent.getCode().getChar().equals("D")) {
+                gameState.toggleAIMode(aiController);
+            }
 
-        System.out.println(gameState.getGameBoard());
+        });
+
 
 
 
@@ -92,8 +103,6 @@ public class ProgramWindow extends Application {
     }
 
 
-    private final int selectedPieceX = 1;
-    private final int selectedPieceY = 7;
 
     public Canvas createCanvas() {
         Canvas canvas = new Canvas(WINDOW_WIDTH+16,WINDOW_HEIGHT);
@@ -102,7 +111,6 @@ public class ProgramWindow extends Application {
         });
 
         canvas.setOnMouseClicked(event -> {
-
             if (event.getButton() == MouseButton.PRIMARY) {
                 playerController.checkMouseLeftClick((int)event.getX(),(int)event.getY());
             }
@@ -110,10 +118,6 @@ public class ProgramWindow extends Application {
             if (event.getButton() == MouseButton.SECONDARY) {
                 playerController.checkMouseRightClick((int)event.getX(),(int)event.getY());
             }
-        });
-        canvas.setOnKeyPressed(keyEvent -> {
-
-
         });
         return canvas;
     }

@@ -9,6 +9,7 @@ import GameComponents.Board.Turn.Action;
 import GameComponents.Board.Turn.ActionType;
 import GameComponents.Board.Turn.AttackAction;
 import GameComponents.Board.Turn.MovementAction;
+import GameComponents.Controllers.AIController;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,14 +20,17 @@ import java.util.Random;
 public class GameState {
     private final int ACTIONS_PER_TURN = 2;
     private GameBoard gameBoard;
+    private AIController aiController;
     private GameTeam currentTeamTurn = GameTeam.WHITE;
     private ArrayList<Action> pastActions;
     private int currentTurnNumber;
+    private boolean useAIMode = false;
 
 
 
-    public GameState() {
+    public GameState(AIController aiController) {
         this.gameBoard = new GameBoard();
+        this.aiController = aiController;
         this.pastActions = new ArrayList<>();
         this.currentTurnNumber = 1;
     }
@@ -36,8 +40,9 @@ public class GameState {
      * @param originalGameState
      * @param branchingAction
      */
-    public GameState(GameState originalGameState, Action branchingAction) {
+    public GameState(GameState originalGameState, Action branchingAction, AIController aiController) {
         this.gameBoard = originalGameState.getGameBoard().clone();
+        this.aiController = aiController;
         this.currentTeamTurn = originalGameState.getCurrentTeamTurn();
         this.pastActions = new ArrayList<>();
         for(Action action: originalGameState.getPastActions()) {
@@ -350,6 +355,13 @@ public class GameState {
         if(pastActions.size() % ACTIONS_PER_TURN == 0) {
             switchTurn();
         }
+        if(currentTeamTurn == GameTeam.BLACK) {
+            if(isUseAIMode()) {
+                aiController.onTurnStartPhase(this,getTurnActions(currentTurnNumber).size());
+            }
+        }
+
+
     }
 
     /**
@@ -367,6 +379,7 @@ public class GameState {
     private void switchTurn() {
         currentTeamTurn = getNextTeamTurn();
         currentTurnNumber++;
+
     }
 
     public GameTeam getNextTeamTurn() {
@@ -397,12 +410,27 @@ public class GameState {
     }
 
     public GameState branchState(Action branchingAction) {
-        return new GameState(this,branchingAction);
+        return new GameState(this,branchingAction,aiController);
     }
 
     @Override
     public String toString() {
         return "GameState: Turn: " + currentTurnNumber + "\n" + gameBoard;
 
+    }
+
+    public boolean isUseAIMode() {
+        return useAIMode;
+    }
+
+    public void toggleAIMode(AIController aiController) {
+        this.useAIMode = !useAIMode;
+        if(useAIMode) {
+            if (currentTeamTurn == GameTeam.BLACK) {
+                aiController.onTurnStartPhase(this,getTurnActions(currentTurnNumber).size());
+
+            }
+        }
+        // Check if using AI mode
     }
 }
