@@ -129,6 +129,24 @@ public class GameBoard {
         return gameBoard[boardLocation.getX()][boardLocation.getY()];
     }
 
+    public ArrayList<GamePiece> getPiece(GamePieceType gamePieceType, GameTeam gameTeam) {
+        ArrayList<GamePiece> gamePieces = new ArrayList<>();
+        if(gameTeam == GameTeam.WHITE) {
+            for(GamePiece gamePiece: whitePieces) {
+                if(gamePiece.getGamePieceType() == gamePieceType) {
+                    gamePieces.add(gamePiece);
+                }
+            }
+        } else {
+            for(GamePiece gamePiece: blackPieces) {
+                if(gamePiece.getGamePieceType() == gamePieceType) {
+                    gamePieces.add(gamePiece);
+                }
+            }
+        }
+        return gamePieces;
+    }
+
     public void deletePiece(int x, int y) {
         deletePiece(new BoardLocation(x,y));
     }

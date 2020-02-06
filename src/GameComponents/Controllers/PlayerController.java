@@ -6,6 +6,7 @@ import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Board.Turn.AttackAction;
 import GameComponents.Board.Turn.MovementAction;
+import GameComponents.Board.Turn.SpecialAction;
 import GameComponents.GUIRenderer;
 import GameComponents.GameState;
 
@@ -48,6 +49,9 @@ public class PlayerController {
                                 if (action instanceof MovementAction) {
                                     guiRenderer.getSelectedMoveAreas().add(((MovementAction) action).getNewLocation());
                                     actionMoveSet.put(((MovementAction) action).getNewLocation(), action);
+                                    if(action instanceof SpecialAction) {
+                                        guiRenderer.getSelectedPieces().add(((SpecialAction) action).getSecondaryPiece().getBoardLocation());
+                                    }
                                 }
                                 if (action instanceof AttackAction) {
                                     guiRenderer.getSelectedAttackAreas().add(((AttackAction) action).getNewLocation());

@@ -64,8 +64,8 @@ public class ProgramWindow extends Application {
         root.requestFocus();
         // Add Debug Commands
         root.setOnKeyPressed(keyEvent -> {
-            System.out.println(keyEvent.getCode().getChar());
-            if(keyEvent.getCode().getChar().equals("D")) {
+            System.out.println(keyEvent.getCode().getName());
+            if(keyEvent.getCode().getName().equals("D")) {
                 gameState.toggleAIMode(aiController);
             }
 

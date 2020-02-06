@@ -20,7 +20,6 @@ public enum GamePieceType {
             case PAWN:
                 availableActions.add(ActionType.MOVEMENT_PAWN_ADVANCE);
                 availableActions.add(ActionType.ATTACK_PAWN);
-                availableActions.add(ActionType.ATTACK_PAWN_EN_PASSANT);
                 break;
             case KNIGHT:
                 availableActions.add(ActionType.MOVEMENT_KNIGHT);
@@ -33,7 +32,7 @@ public enum GamePieceType {
             case ROOK:
                 availableActions.add(ActionType.MOVEMENT_ROOK);
                 availableActions.add(ActionType.ATTACK_ROOK);
-                availableActions.add(ActionType.MOVEMENT_CASTLE_ROOK);
+                availableActions.add(ActionType.CASTLING);
                 break;
             case QUEEN:
                 availableActions.add(ActionType.MOVEMENT_QUEEN);
@@ -42,6 +41,7 @@ public enum GamePieceType {
             case KING:
                 availableActions.add(ActionType.ATTACK_KNIGHT);
                 availableActions.add(ActionType.ATTACK_KING);
+                availableActions.add(ActionType.CASTLING);
                 break;
         }
 
