@@ -175,7 +175,6 @@ public class GameState {
             case MOVEMENT_BISHOP:
                 final int BISHOP_MOVEMENT_LENGTH = 4;
                 for(BoardDirection boardDirection: BoardDirection.values()) {
-                    int passCount = 0;
                     for (int i = 1; i <= BISHOP_MOVEMENT_LENGTH; i++) {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
@@ -191,7 +190,6 @@ public class GameState {
             case ATTACK_BISHOP:
                 final int BISHOP_ATTACK_LENGTH = 4;
                 for(BoardDirection boardDirection: BoardDirection.values()) {
-                    int passCount = 0;
                     for (int i = 1; i <= BISHOP_ATTACK_LENGTH; i++) {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
@@ -221,7 +219,6 @@ public class GameState {
             case ATTACK_ROOK:
                 final int ROOK_ATTACK_LENGTH = 3;
                 for(BoardDirection boardDirection: BoardDirection.values()) {
-                    int passCount = 0;
                     for (int i = 1; i <= ROOK_ATTACK_LENGTH; i++) {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
@@ -237,7 +234,6 @@ public class GameState {
             case MOVEMENT_QUEEN:
                 final int QUEEN_MOVEMENT_LENGTH = 5;
                 for(BoardDirection boardDirection: BoardDirection.values()) {
-                    int passCount = 0;
                     for (int i = 1; i <= QUEEN_MOVEMENT_LENGTH; i++) {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(!gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
@@ -252,7 +248,6 @@ public class GameState {
             case ATTACK_QUEEN:
                 final int QUEEN_ATTACK_LENGTH = 3;
                 for(BoardDirection boardDirection: BoardDirection.values()) {
-                    int passCount = 0;
                     for (int i = 1; i <= QUEEN_ATTACK_LENGTH; i++) {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
@@ -317,7 +312,6 @@ public class GameState {
                                         if(!terminate) {
                                             if (newKingPosition.matchesDirection(newRookPosition, rookDirection.reverse())) {
                                                 validActions.add(new SpecialAction(validKing, ActionType.CASTLING, validKing.getBoardLocation(), newKingPosition, validRook, validRook.getBoardLocation(), newRookPosition));
-                                                System.out.println("CASTLING IS VALID!");
                                             }
                                         }
                                     }
@@ -362,7 +356,6 @@ public class GameState {
     }
 
     public boolean hasPiecePreviouslyAttacked(GamePiece gamePiece) {
-        ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
                 if (action.getGamePiece().equals(gamePiece)) {
@@ -376,7 +369,6 @@ public class GameState {
     }
 
     public boolean hasPiecePreviouslyMoved(GamePiece gamePiece) {
-        ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
                 if (action.getGamePiece().equals(gamePiece)) {
@@ -402,7 +394,7 @@ public class GameState {
         }
         if(currentTeamTurn == GameTeam.BLACK) {
             if(isUseAIMode()) {
-                aiController.onTurnStartPhase(this,getTurnActions(currentTurnNumber).size());
+                aiController.onTurnStartPhase(this);
             }
         }
 
@@ -424,7 +416,6 @@ public class GameState {
     private void switchTurn() {
         currentTeamTurn = getNextTeamTurn();
         currentTurnNumber++;
-
     }
 
     public GameTeam getNextTeamTurn() {
@@ -472,7 +463,7 @@ public class GameState {
         this.useAIMode = !useAIMode;
         if(useAIMode) {
             if (currentTeamTurn == GameTeam.BLACK) {
-                aiController.onTurnStartPhase(this,getTurnActions(currentTurnNumber).size());
+                aiController.onTurnStartPhase(this);
 
             }
         }
