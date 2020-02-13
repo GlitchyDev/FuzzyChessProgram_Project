@@ -7,6 +7,8 @@ import GameComponents.Controllers.AIController;
 import GameComponents.Controllers.PlayerController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -57,6 +59,7 @@ public class ProgramWindow extends Application {
         // Bind after Canvas creation to get proper sizings
         this.guiRenderer = new GUIRenderer(gameState, canvas.getWidth(),canvas.getHeight());
         this.playerController = new PlayerController(gameState, guiRenderer);
+        aiController.setGuiRenderer(guiRenderer);
 
 
         primaryStage.show();
@@ -65,9 +68,7 @@ public class ProgramWindow extends Application {
         // Add Debug Commands
         root.setOnKeyPressed(keyEvent -> {
             System.out.println(keyEvent.getCode().getName());
-            if(keyEvent.getCode().getName().equals("D")) {
-                gameState.toggleAIMode(aiController);
-            }
+
 
         });
 
@@ -91,6 +92,11 @@ public class ProgramWindow extends Application {
         MenuItem menuItem2 = new MenuItem("Undo");
         MenuItem menuItem3 = new MenuItem("Redo");
         MenuItem menuItem4 = new MenuItem("Toggle AI Mode");
+
+        menuItem4.setOnAction(event -> {
+            gameState.toggleAIMode(aiController);
+        });
+
         //menuItem1.setGraphic(new ImageView("file:Files/TV_2.png"));
         MenuItem menuItem5 = new MenuItem("Quit");
         //menuItem2.setGraphic(new ImageView("file:Files/Wine_Bottle.png"));

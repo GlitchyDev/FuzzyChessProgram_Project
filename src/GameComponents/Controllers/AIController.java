@@ -2,9 +2,11 @@ package GameComponents.Controllers;
 
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
+import GameComponents.GUIRenderer;
 import GameComponents.GameState;
 
 public class AIController {
+    private GUIRenderer guiRenderer;
 
 
 
@@ -16,7 +18,7 @@ public class AIController {
                 Action action = gameState.getValidActions(p).get(0);
                 gameState.preformAction(action);
 
-                GameState theRightTimeLine = gameState.branchState(action);
+                //GameState theRightTimeLine = gameState.branchState(action);
 
 
                 break;
@@ -25,6 +27,21 @@ public class AIController {
             //
 
         }
+        afterTurn();
     }
 
+    private void afterTurn() {
+        guiRenderer.getSelectedPieces().clear();
+        guiRenderer.getSelectedAttackAreas().clear();
+        guiRenderer.getSelectedMoveAreas().clear();
+    }
+
+
+    public GUIRenderer getGuiRenderer() {
+        return guiRenderer;
+    }
+
+    public void setGuiRenderer(GUIRenderer guiRenderer) {
+        this.guiRenderer = guiRenderer;
+    }
 }

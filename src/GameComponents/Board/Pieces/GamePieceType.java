@@ -32,7 +32,6 @@ public enum GamePieceType {
             case ROOK:
                 availableActions.add(ActionType.MOVEMENT_ROOK);
                 availableActions.add(ActionType.ATTACK_ROOK);
-                availableActions.add(ActionType.CASTLING);
                 break;
             case QUEEN:
                 availableActions.add(ActionType.MOVEMENT_QUEEN);
