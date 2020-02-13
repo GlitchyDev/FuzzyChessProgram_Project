@@ -28,8 +28,8 @@ public class ProgramWindow extends Application {
     private AIController aiController;
 
     // Window Customization Options
-    private final int WINDOW_WIDTH = 600;
-    private final int WINDOW_HEIGHT = 600;
+    private final int WINDOW_WIDTH = 420;
+    private final int WINDOW_HEIGHT = 445;
     private String PROGRAM_TITLE = "Fuzzy-Logic Chess Program";
 
 
@@ -85,14 +85,22 @@ public class ProgramWindow extends Application {
     }
 
     public MenuBar createMenu() {
-        Menu menu = new Menu("Menu 1");
-        MenuItem menuItem1 = new MenuItem("Item 1");
-        menuItem1.setGraphic(new ImageView("file:Files/TV_2.png"));
-        MenuItem menuItem2 = new MenuItem("Item 2");
-        menuItem2.setGraphic(new ImageView("file:Files/Wine_Bottle.png"));
+        Menu menu = new Menu("Game Options");
+
+        MenuItem menuItem1 = new MenuItem("Restart Game");
+        MenuItem menuItem2 = new MenuItem("Undo");
+        MenuItem menuItem3 = new MenuItem("Redo");
+        MenuItem menuItem4 = new MenuItem("Toggle AI Mode");
+        //menuItem1.setGraphic(new ImageView("file:Files/TV_2.png"));
+        MenuItem menuItem5 = new MenuItem("Quit");
+        //menuItem2.setGraphic(new ImageView("file:Files/Wine_Bottle.png"));
 
         menu.getItems().add(menuItem1);
         menu.getItems().add(menuItem2);
+        menu.getItems().add(menuItem3);
+        menu.getItems().add(menuItem4);
+        menu.getItems().add(menuItem5);
+
 
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().add(menu);

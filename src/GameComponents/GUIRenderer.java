@@ -53,7 +53,7 @@ public class GUIRenderer {
     private final double canvasHeight;
     private int debug = 0;
 
-    private final String pieceFolder = "50";
+    private final String pieceFolder = "100";
 
 
     public GUIRenderer(GameState gameState, double canvasWidth, double canvasHeight) {
