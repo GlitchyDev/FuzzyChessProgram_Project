@@ -35,7 +35,6 @@ public class ProgramWindow extends Application {
     private String PROGRAM_TITLE = "Fuzzy-Logic Chess Program";
 
 
-    private BoardLocation boardLocation;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -50,7 +49,7 @@ public class ProgramWindow extends Application {
         Group root = new Group();
         Canvas canvas = createCanvas();
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        VBox vBox = new VBox(createMenu(),canvas);
+        VBox vBox = new VBox(createMenu(primaryStage),canvas);
         root.getChildren().add(vBox);
         //
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -85,20 +84,34 @@ public class ProgramWindow extends Application {
 
     }
 
-    public MenuBar createMenu() {
+    public MenuBar createMenu(Stage primaryStage) {
         Menu menu = new Menu("Game Options");
 
         MenuItem menuItem1 = new MenuItem("Restart Game");
+        menuItem1.setOnAction(event -> {
+            gameState = new GameState(aiController);
+            playerController.setGameState(gameState);
+            guiRenderer.setGameState(gameState);
+        });
         MenuItem menuItem2 = new MenuItem("Undo");
+        menuItem2.setOnAction(event -> {
+            //gameState.toggleAIMode(aiController);
+        });
         MenuItem menuItem3 = new MenuItem("Redo");
+        menuItem3.setOnAction(event -> {
+            //gameState.toggleAIMode(aiController);
+        });
         MenuItem menuItem4 = new MenuItem("Toggle AI Mode");
-
         menuItem4.setOnAction(event -> {
             gameState.toggleAIMode(aiController);
         });
 
         //menuItem1.setGraphic(new ImageView("file:Files/TV_2.png"));
         MenuItem menuItem5 = new MenuItem("Quit");
+        menuItem5.setOnAction(event -> {
+            primaryStage.close();
+
+        });
         //menuItem2.setGraphic(new ImageView("file:Files/Wine_Bottle.png"));
 
         menu.getItems().add(menuItem1);

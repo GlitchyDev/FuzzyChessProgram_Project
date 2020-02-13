@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PlayerController {
-    private final GameState gameState;
+    private GameState gameState;
     private final GUIRenderer guiRenderer;
 
     private BoardLocation boardLocation;
@@ -109,5 +109,14 @@ public class PlayerController {
                 }
             }
         }
+    }
+
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 }

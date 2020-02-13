@@ -48,7 +48,7 @@ public class GUIRenderer {
 
 
 
-    private final GameState gameState;
+    private GameState gameState;
     private final double canvasWidth;
     private final double canvasHeight;
     private int debug = 0;
@@ -224,5 +224,13 @@ public class GUIRenderer {
 
     public ArrayList<BoardLocation> getSelectedPieces() {
         return selectedPieces;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 }
