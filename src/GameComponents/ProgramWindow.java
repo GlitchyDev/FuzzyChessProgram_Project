@@ -22,11 +22,17 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 
+/**
+ * A Programing Window that will hold and split off all the functions of the applications into different objects
+ */
 public class ProgramWindow extends Application {
-    private FileLoader fileLoader;
+    // The main Gamestate of the ongoing game
     private GameState gameState;
+    // A renderer of all the elements in the window
     private GUIRenderer guiRenderer;
+    // Takes note of player input and acts accordingly
     private PlayerController playerController;
+    // Will take note of the board and let the AI controller take its action
     private AIController aiController;
 
     // Window Customization Options
@@ -38,7 +44,6 @@ public class ProgramWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        this.fileLoader = new FileLoader();
         this.aiController = new AIController();
         this.gameState = new GameState(aiController);
 
@@ -46,6 +51,7 @@ public class ProgramWindow extends Application {
         // Create JAVAFX Visuals
         primaryStage.setTitle(PROGRAM_TITLE);
 
+        // Create the Canvas needed for rendering
         Group root = new Group();
         Canvas canvas = createCanvas();
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -64,7 +70,7 @@ public class ProgramWindow extends Application {
         primaryStage.show();
 
         root.requestFocus();
-        // Add Debug Commands
+        // Add Keyboard commands here
         root.setOnKeyPressed(keyEvent -> {
             System.out.println(keyEvent.getCode().getName());
 
@@ -75,7 +81,6 @@ public class ProgramWindow extends Application {
 
 
         // This is the Window Rendering Cycle, will go to UI Manager class most likely
-        // TODO move into a UI manager class that will handle rendering
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 guiRenderer.renderGUI(gc);
@@ -84,6 +89,8 @@ public class ProgramWindow extends Application {
 
     }
 
+
+    // Creates the menu Elements of the Canvas
     public MenuBar createMenu(Stage primaryStage) {
         Menu menu = new Menu("Game Options");
 
@@ -130,7 +137,7 @@ public class ProgramWindow extends Application {
     }
 
 
-
+    // Creates the canvas and related events ( passing to the playerController )
     public Canvas createCanvas() {
         Canvas canvas = new Canvas(WINDOW_WIDTH+16,WINDOW_HEIGHT);
         canvas.setOnMouseMoved(event -> {

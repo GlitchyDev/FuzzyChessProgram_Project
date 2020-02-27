@@ -2,6 +2,9 @@ package GameComponents.Board.Pieces;
 
 import GameComponents.Board.GameTeam;
 
+/**
+ * A Object Representation of a Gamepiece
+ */
 public class GamePiece {
     private final GameTeam gameTeam;
     private final GamePieceType gamePieceType;

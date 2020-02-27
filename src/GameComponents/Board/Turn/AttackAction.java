@@ -5,6 +5,9 @@ import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.GameState;
 
+/**
+ * A Type of Action that concerns attacking
+ */
 public class AttackAction extends Action {
     private final GamePiece targetPiece;
     private final boolean isSuccessful;

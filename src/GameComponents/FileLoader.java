@@ -4,6 +4,9 @@ import javafx.scene.image.Image;
 
 import java.util.HashMap;
 
+/**
+ * Loads all the Images into the proper format
+ */
 public class FileLoader {
     private static HashMap<String,Image> loadedImages = new HashMap<>();
 

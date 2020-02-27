@@ -5,6 +5,9 @@ import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.GameState;
 
+/*
+A Type of action that concerns movement
+ */
 public class MovementAction extends Action {
     private final BoardLocation oldLocation;
     private final BoardLocation newLocation;

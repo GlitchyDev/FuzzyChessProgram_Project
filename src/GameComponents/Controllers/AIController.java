@@ -10,7 +10,7 @@ public class AIController {
 
 
 
-    public void onTurnStartPhase(GameState gameState) {
+    public void preformAction(GameState gameState) {
 
         for(int i = 0; i < gameState.getGameBoard().getBlackPieces().size(); i++) {
             GamePiece p = gameState.getGameBoard().getBlackPieces().get(i);

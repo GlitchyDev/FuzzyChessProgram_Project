@@ -16,7 +16,7 @@ public class GameBoard {
     private final ArrayList<GamePiece> whitePieces;
     private final ArrayList<GamePiece> blackPieces;
 
-
+    // Creates a Gameboard with the pieces already populated
     public GameBoard() {
         gameBoard = new GamePiece[BOARD_WIDTH][BOARD_HEIGHT];
         this.whitePieces = new ArrayList<>();
@@ -24,6 +24,7 @@ public class GameBoard {
         populate();
     }
 
+    // Creates a Gameboard clone from another
     public GameBoard(ArrayList<GamePiece> whitePieces, ArrayList<GamePiece> blackPieces) {
         gameBoard = new GamePiece[BOARD_WIDTH][BOARD_HEIGHT];
         this.whitePieces = new ArrayList<>();
@@ -36,6 +37,7 @@ public class GameBoard {
         }
     }
 
+    // Populates the Gameboard with Pieces
     public void populate() {
         for(int y = 0; y < BOARD_HEIGHT; y++) {
             for(int x = 0; x < BOARD_WIDTH; x++) {
@@ -113,22 +115,23 @@ public class GameBoard {
         }
     }
 
+    // Checks if the space is occupied by a piece
     public boolean isSpaceOccupied(int x, int y) {
         return isSpaceOccupied(new BoardLocation(x,y));
     }
-
     public boolean isSpaceOccupied(BoardLocation boardLocation) {
         return gameBoard[boardLocation.getX()][boardLocation.getY()] != null;
     }
 
+    // Gets the piece at the specified location
     public GamePiece getPiece(int x, int y) {
         return getPiece(new BoardLocation(x,y));
     }
-
     public GamePiece getPiece(BoardLocation boardLocation) {
         return gameBoard[boardLocation.getX()][boardLocation.getY()];
     }
 
+    // Gets all pieces matching the description
     public ArrayList<GamePiece> getPiece(GamePieceType gamePieceType, GameTeam gameTeam) {
         ArrayList<GamePiece> gamePieces = new ArrayList<>();
         if(gameTeam == GameTeam.WHITE) {
@@ -147,10 +150,10 @@ public class GameBoard {
         return gamePieces;
     }
 
+    // Deletes the piece at a given location
     public void deletePiece(int x, int y) {
         deletePiece(new BoardLocation(x,y));
     }
-
     public void deletePiece(BoardLocation boardLocation) {
         GamePiece gamePiece = getPiece(boardLocation);
         if(gamePiece.getGameTeam() == GameTeam.WHITE) {
@@ -161,10 +164,10 @@ public class GameBoard {
         gameBoard[boardLocation.getX()][boardLocation.getY()] = null;
     }
 
+    // Adds a piece to the given location
     public void addPiece(GamePiece gamePiece, int x, int y) {
         addPiece(gamePiece, new BoardLocation(x,y));
     }
-
     public void addPiece(GamePiece gamePiece, BoardLocation boardLocation) {
         gameBoard[boardLocation.getX()][boardLocation.getY()] = gamePiece;
         if(gamePiece.getGameTeam() == GameTeam.WHITE) {
@@ -174,50 +177,34 @@ public class GameBoard {
         }
     }
 
+    // Checks if a given location is inside the board
     public boolean isInsideBoard(int x, int y) {
         return isInsideBoard(new BoardLocation(x,y));
     }
-
     public boolean isInsideBoard(BoardLocation boardLocation) {
         return boardLocation.getX() >= 0 && boardLocation.getX() < BOARD_WIDTH && boardLocation.getY() >= 0 && boardLocation.getY() < BOARD_HEIGHT;
     }
 
+    // Moves a piece from one location on the board to another
     public void movePiece(int x1, int y1, int x2, int y2) {
         movePiece(new BoardLocation(x1,y1),new BoardLocation(x2,y2));
     }
-
     public void movePiece(BoardLocation oldLocation, BoardLocation newLocation) {
         GamePiece gamePiece = getPiece(oldLocation);
         deletePiece(oldLocation);
         addPiece(gamePiece,newLocation);
     }
 
-    public ArrayList<GamePiece> retrieveValidPieces(GameTeam gameTeam, GamePieceType gamePieceType) {
-        ArrayList<GamePiece> validPieces = new ArrayList<>();
-        if(gameTeam == GameTeam.WHITE) {
-            for(GamePiece gamePiece: whitePieces) {
-                if(gamePiece.getGamePieceType() == gamePieceType) {
-                    validPieces.add(gamePiece);
-                }
-            }
-        } else {
-            for(GamePiece gamePiece: blackPieces) {
-                if(gamePiece.getGamePieceType() == gamePieceType) {
-                    validPieces.add(gamePiece);
-                }
-            }
-        }
-        return validPieces;
-    }
 
+    // Retrieves all White Pieces
     public ArrayList<GamePiece> getWhitePieces() {
         return whitePieces;
     }
-
+    // Retrieves all Black Pieces
     public ArrayList<GamePiece> getBlackPieces() {
         return blackPieces;
     }
-
+    // Clones the Board
     public GameBoard clone() {
         return new GameBoard(whitePieces,blackPieces);
     }

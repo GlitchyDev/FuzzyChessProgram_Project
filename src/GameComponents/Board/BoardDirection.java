@@ -1,5 +1,6 @@
 package GameComponents.Board;
 
+// All Valid Directions on the Game board
 public enum BoardDirection {
     NORTH,
     NORTH_EAST,

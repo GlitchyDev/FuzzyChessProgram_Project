@@ -4,6 +4,9 @@ import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 
+/**
+ * A Holder for a Special Movement Action ( Castling )
+ */
 public class SpecialAction extends MovementAction {
     private final GamePiece secondaryPiece;
     private final BoardLocation secondaryOldLocation;

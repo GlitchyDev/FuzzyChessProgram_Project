@@ -66,18 +66,19 @@ public class GUIRenderer {
     }
 
 
-
+    // Renders the GUI of the program, does it once every frame
     public void renderGUI(GraphicsContext gc) {
         // Clear Field
         gc.setFill(Color.WHITE);
         gc.setGlobalAlpha(1.0);
         gc.fillRect(0,0,canvasWidth,canvasHeight);
 
+
         renderBoard(gc);
 
         debug++;
 
-
+        // Renders all the Selected Piece Boxes
         gc.setGlobalAlpha(SELECTED_OPACITY);
         gc.setFill(SELECTED_PIECE_COLOR);
         if(selectedPieces.size() > 0) {
@@ -86,6 +87,7 @@ public class GUIRenderer {
 
             }
         }
+        // Renders all the Movement Option Boxes
         gc.setFill(SELECTED_MOVE_COLOR);
         if(selectedMoveAreas.size() > 0) {
             for(BoardLocation boardLocation: selectedMoveAreas) {
@@ -93,6 +95,7 @@ public class GUIRenderer {
 
             }
         }
+        // Renders all the Attack option Boxes
         gc.setFill(SELECTED_ATTACK_COLOR);
         if(selectedAttackAreas.size() > 0) {
             for(BoardLocation boardLocation: selectedAttackAreas) {
@@ -104,6 +107,7 @@ public class GUIRenderer {
 
 
 
+        // Renders the Debug String
         gc.setFill(DEBUG_COLOR);
         gc.fillText(debugString,0,DEBUG_TEXTOFFSET);
 
@@ -112,13 +116,17 @@ public class GUIRenderer {
             gc.fillText("Using AI Mode",0,10);
         }
 
-        gc.setFill(Color.BLUE);
-        gc.fillRect(debug%canvasWidth,debug/canvasWidth%canvasHeight,10,10);
     }
 
+    // Renders the physical game board
     public void renderBoard(GraphicsContext gc) {
         gc.setFill(BOARD_COLOR);
         gc.fillRect(BOARD_X_OFFSET,BOARD_Y_OFFSET,BOARD_LENGTH,BOARD_LENGTH);
+
+
+        // Renders the Debug square to keep the lil guy alive
+        gc.setFill(Color.BLUE);
+        gc.fillRect(debug%canvasWidth,debug/canvasWidth%canvasHeight,10,10);
 
         boolean isBlack = false;
         for(int y = 0; y < 8; y++) {
@@ -134,6 +142,7 @@ public class GUIRenderer {
         renderGamePieces(gc);
     }
 
+    // Renders the game pieces
     private void renderGamePieces(GraphicsContext gc) {
         for(GamePiece gamePiece: gameState.getGameBoard().getBlackPieces()) {
             renderPiece(gc,gamePiece);
@@ -143,6 +152,7 @@ public class GUIRenderer {
         }
     }
 
+    // Renders an individual piece with its specified image from the pieceFolder
     private void renderPiece(GraphicsContext gc, GamePiece gamePiece) {
         gc.setFill(gamePiece.getGameTeam() == GameTeam.WHITE ? WHITE_PIECE_COLOR : BLACK_PIECE_COLOR);
 
@@ -197,6 +207,7 @@ public class GUIRenderer {
         //gc.fillText(gamePiece.getGamePieceType().toString(),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH + PIECE_TEXTOFFSET);
     }
 
+    // Renders all the game board coordinates ( Replace with a proper board location stuff once we can )
     private void renderDebugCords(GraphicsContext gc) {
         gc.setFill(DEBUG_COLOR);
         for(int y = 0; y < 8; y++) {

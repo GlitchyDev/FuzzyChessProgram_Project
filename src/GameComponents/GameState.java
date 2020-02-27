@@ -15,12 +15,19 @@ import java.util.ArrayList;
  * A Wrapper Object that holds the GameBoard, and tracks all actions done. It allows for easy branching and cloning to show all possibilities
  */
 public class GameState {
+    // The amount of actions a player can take per turn
     private final int ACTIONS_PER_TURN = 2;
+    // The current game board
     private GameBoard gameBoard;
+    // A reference to the AI controller to notificate when its their turn
     private AIController aiController;
+    // Whose turn it currently is
     private GameTeam currentTeamTurn = GameTeam.WHITE;
+    // All past actions
     private ArrayList<Action> pastActions;
+    // The current Turn count
     private int currentTurnNumber;
+    // If AI mode is enabled
     private boolean useAIMode = false;
 
 
@@ -74,7 +81,7 @@ public class GameState {
      */
     public ArrayList<Action> getValidActions(GamePiece gamePiece) {
         ArrayList<Action> validActions = new ArrayList<>();
-        ArrayList<ActionType> availableActions = gamePiece.getGamePieceType().getAvalibleActions();
+        ArrayList<ActionType> availableActions = gamePiece.getGamePieceType().getAvailableActions();
 
 
         if(gamePiece.getGameTeam() == getCurrentTeamTurn()) {
@@ -326,7 +333,7 @@ public class GameState {
     }
 
 
-
+    // Has the piece previously attacked this turn
     public boolean hasPiecePreviouslyAttackedThisTurn(GamePiece gamePiece) {
         ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(currentTurnsActions.size() != 0) {
@@ -341,6 +348,8 @@ public class GameState {
         return false;
     }
 
+
+    // Has the piece previously moved this turn
     public boolean hasPiecePreviouslyMovedThisTurn(GamePiece gamePiece) {
         ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(currentTurnsActions.size() != 0) {
@@ -355,6 +364,8 @@ public class GameState {
         return false;
     }
 
+
+    // Has the piece previously attacked this game
     public boolean hasPiecePreviouslyAttacked(GamePiece gamePiece) {
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
@@ -368,6 +379,8 @@ public class GameState {
         return false;
     }
 
+
+    // Has the piece previously moved this game
     public boolean hasPiecePreviouslyMoved(GamePiece gamePiece) {
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
@@ -378,6 +391,7 @@ public class GameState {
                 }
             }
         }
+
         return false;
     }
 
@@ -391,10 +405,11 @@ public class GameState {
         pastActions.add(action);
         if(pastActions.size() % ACTIONS_PER_TURN == 0) {
             switchTurn();
+            currentTurnNumber++;
         }
         if(currentTeamTurn == GameTeam.BLACK) {
             if(isUseAIMode()) {
-                aiController.onTurnStartPhase(this);
+                aiController.preformAction(this);
             }
         }
 
@@ -406,16 +421,23 @@ public class GameState {
      * @param action
      */
     public void undoAction(Action action) {
-        action.undoAction(gameBoard);
-        pastActions.remove(action);
         if(pastActions.size() % ACTIONS_PER_TURN == 0) {
             switchTurn();
+            currentTurnNumber--;
         }
+        action.undoAction(gameBoard);
+        pastActions.remove(action);
+        if(currentTeamTurn == GameTeam.BLACK) {
+            if(isUseAIMode()) {
+                aiController.preformAction(this);
+            }
+        }
+
     }
 
+    // Switches whose turn it is
     private void switchTurn() {
         currentTeamTurn = getNextTeamTurn();
-        currentTurnNumber++;
     }
 
     public GameTeam getNextTeamTurn() {
@@ -459,11 +481,12 @@ public class GameState {
         return useAIMode;
     }
 
+    // Toggles if the AI mode is enabled or not
     public void toggleAIMode(AIController aiController) {
         this.useAIMode = !useAIMode;
         if(useAIMode) {
             if (currentTeamTurn == GameTeam.BLACK) {
-                aiController.onTurnStartPhase(this);
+                aiController.preformAction(this);
 
             }
         }

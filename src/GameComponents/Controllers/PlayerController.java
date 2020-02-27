@@ -13,6 +13,7 @@ import GameComponents.GameState;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+// Works with Player Input from the Game window and allows for players to modify the game
 public class PlayerController {
     private GameState gameState;
     private final GUIRenderer guiRenderer;
@@ -26,6 +27,7 @@ public class PlayerController {
         this.actionMoveSet = new HashMap<>();
     }
 
+    // Looks at where the player left clicks
     public void checkMouseLeftClick(int canvasX, int canvasY) {
         if(!gameState.isUseAIMode() || gameState.getCurrentTeamTurn() == GameTeam.WHITE) {
             // Check if its actually inside the damn thing
@@ -85,7 +87,7 @@ public class PlayerController {
         }
     }
 
-
+    // Looks at where players right click
     public void checkMouseRightClick(int canvasX, int canvasY) {
         // Check if its actually inside the damn thing
         if (!gameState.isUseAIMode() || gameState.getCurrentTeamTurn() == GameTeam.WHITE) {

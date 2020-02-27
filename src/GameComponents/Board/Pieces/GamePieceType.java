@@ -4,6 +4,9 @@ import GameComponents.Board.Turn.ActionType;
 
 import java.util.ArrayList;
 
+/**
+ * An Enum that contains all logic and code that differentiates all Gamepieces types from each other
+ */
 public enum GamePieceType {
     PAWN,
     KNIGHT,
@@ -13,7 +16,7 @@ public enum GamePieceType {
     KING;
 
 
-    public ArrayList<ActionType> getAvalibleActions() {
+    public ArrayList<ActionType> getAvailableActions() {
         ArrayList<ActionType> availableActions = new ArrayList<>();
         availableActions.add(ActionType.MOVEMENT_STANDARD);
         switch(this) {
@@ -47,7 +50,7 @@ public enum GamePieceType {
         return availableActions;
     }
 
-
+    // If the Piece can Attack Twice
     public boolean canAttackTwice() {
         switch(this) {
             case KNIGHT:
@@ -62,6 +65,7 @@ public enum GamePieceType {
         return Boolean.parseBoolean(null);
     }
 
+    // If the Piece can move Twice
     public boolean canMoveTwice() {
         switch(this) {
             case BISHOP:
