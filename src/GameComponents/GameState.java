@@ -420,7 +420,7 @@ public class GameState {
      * Undo's the action, it will only work if this action is back-front linear
      * @param action
      */
-    public void undoAction(Action action) {
+    public void undoAction(Action action, boolean doNotify) {
         if(pastActions.size() % ACTIONS_PER_TURN == 0) {
             switchTurn();
             currentTurnNumber--;
@@ -428,7 +428,7 @@ public class GameState {
         action.undoAction(gameBoard);
         pastActions.remove(action);
         if(currentTeamTurn == GameTeam.BLACK) {
-            if(isUseAIMode()) {
+            if(isUseAIMode() && doNotify) {
                 aiController.preformAction(this);
             }
         }

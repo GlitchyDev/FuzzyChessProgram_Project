@@ -1,5 +1,6 @@
 package GameComponents;
 
+import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
@@ -101,13 +102,18 @@ public class ProgramWindow extends Application {
             guiRenderer.setGameState(gameState);
         });
         MenuItem menuItem2 = new MenuItem("Undo");
+
         menuItem2.setOnAction(event -> {
-            //gameState.toggleAIMode(aiController);
+            if(gameState.isUseAIMode() && gameState.getCurrentTeamTurn() == GameTeam.WHITE && gameState.getTurnActions(gameState.getCurrentTurnNumber()).size() % 2 == 0) {
+                gameState.undoAction(gameState.getPastActions().get(gameState.getPastActions().size() - 1), false);
+                gameState.undoAction(gameState.getPastActions().get(gameState.getPastActions().size() - 1), false);
+                gameState.undoAction(gameState.getPastActions().get(gameState.getPastActions().size() - 1), false);
+
+            } else {
+                gameState.undoAction(gameState.getPastActions().get(gameState.getPastActions().size() - 1), false);
+            }
         });
-        MenuItem menuItem3 = new MenuItem("Redo");
-        menuItem3.setOnAction(event -> {
-            //gameState.toggleAIMode(aiController);
-        });
+        //                 gameState.undoAction(gameState.getPastActions().get(gameState.getPastActions().size() - 1), false);
         MenuItem menuItem4 = new MenuItem("Toggle AI Mode");
         menuItem4.setOnAction(event -> {
             gameState.toggleAIMode(aiController);
@@ -123,7 +129,6 @@ public class ProgramWindow extends Application {
 
         menu.getItems().add(menuItem1);
         menu.getItems().add(menuItem2);
-        menu.getItems().add(menuItem3);
         menu.getItems().add(menuItem4);
         menu.getItems().add(menuItem5);
 
