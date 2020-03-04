@@ -10,7 +10,7 @@ import GameComponents.GameState;
  */
 public class AttackAction extends Action {
     private final GamePiece targetPiece;
-    private final boolean isSuccessful;
+    private boolean isSuccessful;
     private final BoardLocation oldLocation;
     private final BoardLocation newLocation;
 
@@ -40,7 +40,13 @@ public class AttackAction extends Action {
     }
 
     @Override
-    public void preformAction(GameBoard gameBoard) {
+    public void preformAction(GameState gameState, GameBoard gameBoard) {
+        int attackRoll = gameState.getDieRoll(getGamePiece(),getTargetPiece());
+        System.out.println("Gamepiece " + getGamePiece() + " attacking " + getTargetPiece() + " with a roll of " + attackRoll);
+        isSuccessful = getGamePiece().getGamePieceType().isSuccessfulAttackRoll(targetPiece.getGamePieceType(), attackRoll);
+        System.out.println("Attack Successful: " + isSuccessful);
+
+        // Here do currentResult = getDieRoll(); shit and figure out if stuff is successful
         if(isSuccessful) {
             gameBoard.deletePiece(newLocation);
             gameBoard.movePiece(oldLocation, newLocation);
@@ -53,6 +59,7 @@ public class AttackAction extends Action {
         if(isSuccessful) {
             gameBoard.movePiece(newLocation, oldLocation);
             gameBoard.addPiece(targetPiece, newLocation);
+            getGamePiece().setBoardLocation(oldLocation);
         }
     }
 

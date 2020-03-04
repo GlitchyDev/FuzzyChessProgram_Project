@@ -33,7 +33,7 @@ public class GUIRenderer {
 
     // DEBUG
     private String debugString = "";
-    private final int DEBUG_TEXTOFFSET = 440;
+    private final int DEBUG_TEXTOFFSET = 300;
     private final Color DEBUG_COLOR = Color.LIME;
     private final int DEBUG_CORDOFFSET = 10;
 
@@ -107,6 +107,7 @@ public class GUIRenderer {
 
 
 
+        debugString = "BEES " + gameState.getCurrentResult();
         // Renders the Debug String
         gc.setFill(DEBUG_COLOR);
         gc.fillText(debugString,0,DEBUG_TEXTOFFSET);

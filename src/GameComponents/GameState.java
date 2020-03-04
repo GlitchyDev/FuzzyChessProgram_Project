@@ -10,6 +10,7 @@ import GameComponents.Board.Turn.*;
 import GameComponents.Controllers.AIController;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A Wrapper Object that holds the GameBoard, and tracks all actions done. It allows for easy branching and cloning to show all possibilities
@@ -19,23 +20,37 @@ public class GameState {
     private final int ACTIONS_PER_TURN = 2;
     // The current game board
     private GameBoard gameBoard;
+    // A random for determining the current board state
+    private final long GAME_SESSION_SEED;
+    private long currentSeed;
+    private Random random;
     // A reference to the AI controller to notificate when its their turn
     private AIController aiController;
     // Whose turn it currently is
     private GameTeam currentTeamTurn = GameTeam.WHITE;
     // All past actions
     private ArrayList<Action> pastActions;
+    private ArrayList<Long> pastSeeds;
     // The current Turn count
     private int currentTurnNumber;
     // If AI mode is enabled
     private boolean useAIMode = false;
 
+    private int currentResult = 0;
 
+    public int getCurrentResult() {
+        return currentResult;
+    }
 
     public GameState(AIController aiController) {
         this.gameBoard = new GameBoard();
+        this.random = new Random();
+        GAME_SESSION_SEED = random.nextLong();
+        currentSeed = GAME_SESSION_SEED;
+        this.random.setSeed(GAME_SESSION_SEED);
         this.aiController = aiController;
         this.pastActions = new ArrayList<>();
+        this.pastSeeds = new ArrayList<>();
         this.currentTurnNumber = 1;
     }
 
@@ -46,9 +61,14 @@ public class GameState {
      */
     public GameState(GameState originalGameState, Action branchingAction, AIController aiController) {
         this.gameBoard = originalGameState.getGameBoard().clone();
+        this.random = new Random();
+        this.GAME_SESSION_SEED = originalGameState.getGAME_SESSION_SEED();
+        this.currentSeed = originalGameState.getCurrentSeed();
+        this.random.setSeed(currentSeed);
         this.aiController = aiController;
         this.currentTeamTurn = originalGameState.getCurrentTeamTurn();
         this.pastActions = new ArrayList<>();
+        this.pastSeeds = new ArrayList<>();
         for(Action action: originalGameState.getPastActions()) {
             pastActions.add(action);
         }
@@ -401,7 +421,7 @@ public class GameState {
      * @param action
      */
     public void preformAction(Action action) {
-        action.preformAction(gameBoard);
+        action.preformAction(this,gameBoard);
         pastActions.add(action);
         if(pastActions.size() % ACTIONS_PER_TURN == 0) {
             switchTurn();
@@ -412,8 +432,6 @@ public class GameState {
                 aiController.preformAction(this);
             }
         }
-
-
     }
 
     /**
@@ -432,7 +450,12 @@ public class GameState {
                 aiController.preformAction(this);
             }
         }
-
+        if(pastSeeds.size() > 1) {
+            currentSeed = pastSeeds.get(pastSeeds.size() - 1);
+            pastSeeds.remove(pastSeeds.size() - 1);
+        } else {
+            currentSeed = GAME_SESSION_SEED;
+        }
     }
 
     // Switches whose turn it is
@@ -491,5 +514,22 @@ public class GameState {
             }
         }
         // Check if using AI mode
+    }
+
+    public int getDieRoll(GamePiece attacker, GamePiece defender) {
+        pastSeeds.add(currentSeed);
+        random.setSeed(currentSeed * attacker.getBoardLocation().getX() + attacker.getBoardLocation().getY() * defender.getBoardLocation().getX() + attacker.getBoardLocation().getY());
+        int result =  random.nextInt(6)+1;
+        currentSeed = random.nextLong();
+        random.setSeed(currentSeed);
+        return result;
+    }
+
+    public long getGAME_SESSION_SEED() {
+        return GAME_SESSION_SEED;
+    }
+
+    public long getCurrentSeed() {
+        return currentSeed;
     }
 }

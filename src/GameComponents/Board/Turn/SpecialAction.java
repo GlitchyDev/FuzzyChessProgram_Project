@@ -3,6 +3,7 @@ package GameComponents.Board.Turn;
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.GameState;
 
 /**
  * A Holder for a Special Movement Action ( Castling )
@@ -19,8 +20,8 @@ public class SpecialAction extends MovementAction {
     }
 
     @Override
-    public void preformAction(GameBoard gameBoard) {
-        super.preformAction(gameBoard);
+    public void preformAction(GameState gameState, GameBoard gameBoard) {
+        super.preformAction(gameState, gameBoard);
         gameBoard.movePiece(secondaryOldLocation,secondaryNewLocation);
         secondaryPiece.setBoardLocation(secondaryNewLocation);
     }
