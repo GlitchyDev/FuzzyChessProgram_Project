@@ -80,6 +80,16 @@ public enum GamePieceType {
         return Boolean.parseBoolean(null);
     }
 
+    public double getSuccessAttackChance(GamePieceType attackTarget) {
+        int successes = 0;
+        for(int i = 1; i <= 6; i++) {
+            if(isSuccessfulAttackRoll(attackTarget,i)) {
+                successes++;
+            }
+        }
+        return 1.0/6.0*successes;
+    }
+
     public boolean isSuccessfulAttackRoll(GamePieceType attackTarget, int attackRoll) {
         switch(this) {
             case KING:

@@ -161,7 +161,7 @@ public class GameState {
                 for(BoardDirection boardDirection: BoardDirection.values()) {
                     if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
                         if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_PAWN,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), true));
+                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_PAWN,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), false));
                         }
                     }
                 }
@@ -194,7 +194,7 @@ public class GameState {
                 for(BoardDirection boardDirection: BoardDirection.values()) {
                     if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
                         if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KNIGHT,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), true));
+                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KNIGHT,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), false));
                         }
                     }
                 }
@@ -221,7 +221,7 @@ public class GameState {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                                 if(gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)).getGameTeam() != gamePiece.getGameTeam()) {
-                                    validActions.add(new AttackAction(gamePiece, ActionType.ATTACK_BISHOP, gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection, i)), true));
+                                    validActions.add(new AttackAction(gamePiece, ActionType.ATTACK_BISHOP, gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection, i)), false));
                                 }
                                 break;
                             }
@@ -250,7 +250,7 @@ public class GameState {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                                 if(gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)).getGameTeam() != gamePiece.getGameTeam()) {
-                                    validActions.add(new AttackAction(gamePiece, ActionType.ATTACK_ROOK, gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection, i)), true));
+                                    validActions.add(new AttackAction(gamePiece, ActionType.ATTACK_ROOK, gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection, i)), false));
                                 }
                                 break;
                             }
@@ -279,7 +279,7 @@ public class GameState {
                         if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                             if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i))) {
                                 if(gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,i)).getGameTeam() != gamePiece.getGameTeam()) {
-                                    validActions.add(new AttackAction(gamePiece, ActionType.ATTACK_QUEEN, gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection, i)), true));
+                                    validActions.add(new AttackAction(gamePiece, ActionType.ATTACK_QUEEN, gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection, i)), false));
                                 }
                                 break;
                             }
@@ -291,7 +291,7 @@ public class GameState {
                 for(BoardDirection boardDirection: BoardDirection.values()) {
                     if(gameBoard.isInsideBoard(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1))) {
                         if(gameBoard.isSpaceOccupied(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)) && gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)).getGameTeam() != gamePiece.getGameTeam()) {
-                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KING,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), true));
+                            validActions.add(new AttackAction(gamePiece,ActionType.ATTACK_KING,gameBoard.getPiece(gamePiece.getBoardLocation().getDirectionLocation(boardDirection,1)), false));
                         }
                     }
                 }

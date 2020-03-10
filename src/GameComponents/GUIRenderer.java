@@ -107,7 +107,7 @@ public class GUIRenderer {
 
 
 
-        debugString = "BEES " + gameState.getCurrentResult();
+        debugString = "";
         // Renders the Debug String
         gc.setFill(DEBUG_COLOR);
         gc.fillText(debugString,0,DEBUG_TEXTOFFSET);
