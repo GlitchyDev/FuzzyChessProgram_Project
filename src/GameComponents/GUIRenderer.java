@@ -3,20 +3,31 @@ package GameComponents;
 import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.Board.Pieces.GamePieceType;
+import GameComponents.Board.Turn.Action;
+import GameComponents.Board.Turn.AttackAction;
+import GameComponents.Board.Turn.MovementAction;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class specifically handles all GUI rendering for a Game Window. In the future this class will need to account
  * for window resizing to properly render to new size
  */
 public class GUIRenderer {
+    private ProgramWindow gameWindow;
     // BOARD
+    private final static int WINDOW_LENGTH = 390;
+    public static int WINDOW_WIDTH = WINDOW_LENGTH + 20;
+    public static int WINDOW_HEIGHT = WINDOW_LENGTH + 45 + 100;
+
     public static final int BOARD_LENGTH = 420;
     private final Color BOARD_COLOR = Color.RED;
-    public static final int BOARD_Y_OFFSET = 0;
+    public static final int BOARD_Y_OFFSET = 100;
     public static final int BOARD_X_OFFSET = 0;
 
     // SQUARES
@@ -49,15 +60,17 @@ public class GUIRenderer {
 
 
     private GameState gameState;
-    private final double canvasWidth;
-    private final double canvasHeight;
+    private double canvasWidth;
+    private double canvasHeight;
     private int debug = 0;
 
-    private final String pieceFolder = "100";
+    private final String pieceFolder = "Pieces";
+    private final String otherFolder = "OtherSprites";
 
 
-    public GUIRenderer(GameState gameState, double canvasWidth, double canvasHeight) {
+    public GUIRenderer(GameState gameState, ProgramWindow gameWindow, double canvasWidth, double canvasHeight) {
         this.gameState = gameState;
+        this.gameWindow = gameWindow;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         selectedPieces = new ArrayList<>();
@@ -71,7 +84,7 @@ public class GUIRenderer {
         // Clear Field
         gc.setFill(Color.WHITE);
         gc.setGlobalAlpha(1.0);
-        gc.fillRect(0,0,canvasWidth,canvasHeight);
+        gc.fillRect(0,0,canvasWidth*2,canvasHeight);
 
 
         renderBoard(gc);
@@ -115,8 +128,54 @@ public class GUIRenderer {
         if(gameState.isUseAIMode()) {
             gc.setFill(DEBUG_COLOR);
             gc.fillText("Using AI Mode",0,10);
+            if(gameWindow.isUseAIDebugMode()) {
+                gc.fillText("Using AI Debug Mode", 0, 20);
+                renderAIDebugMode(gc);
+            }
         }
 
+        renderInfoBoard(gc);
+
+    }
+
+    public void renderInfoBoard(GraphicsContext gc) {
+
+        ArrayList<Action> currentActions = gameState.getTurnActions(gameState.getCurrentTurnNumber());
+        for(int i = 0; i < currentActions.size(); i++) {
+            Action action = currentActions.get(i);
+            if(action instanceof AttackAction) {
+                gc.drawImage(getPieceImage(action.getGamePiece()),PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
+                gc.setFill(Color.BLUE);
+                gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i, 10);
+                String attackResult = otherFolder + "/" + (action.getGamePiece().getGameTeam() == GameTeam.WHITE ? "W" : "B") + "Attack" + (((AttackAction) action).isSuccessful() ? "Win" : "Lose") + ".png";
+                gc.drawImage(FileLoader.getImage(attackResult), PIECE_LENGTH * i, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+            }
+            if(action instanceof MovementAction) {
+                gc.drawImage(getPieceImage(action.getGamePiece()),PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
+                gc.fillText(action.getGamePiece().getBoardLocation().toString(),PIECE_LENGTH * i,10);
+                gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), PIECE_LENGTH * i,PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
+            }
+        }
+
+        if(gameState.getCurrentTurnNumber() > 1) {
+            ArrayList<Action> pastActions = gameState.getTurnActions(gameState.getCurrentTurnNumber()-1);
+            for (int i = 0; i < pastActions.size(); i++) {
+                Action action = pastActions.get(i);
+                if (action instanceof AttackAction) {
+                    gc.drawImage(getPieceImage(action.getGamePiece()), PIECE_LENGTH * i + 200, 0, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.setFill(Color.BLUE);
+                    gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i + 200, 10);
+                    String attackResult = otherFolder + "/" + (action.getGamePiece().getGameTeam() == GameTeam.WHITE ? "W" : "B") + "Attack" + (((AttackAction) action).isSuccessful() ? "Win" : "Lose") + ".png";
+                    gc.drawImage(FileLoader.getImage(attackResult), PIECE_LENGTH * i + 200, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                }
+                if (action instanceof MovementAction) {
+                    gc.drawImage(getPieceImage(action.getGamePiece()), PIECE_LENGTH * i + 200, 0, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i + 200, 10);
+                    gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), PIECE_LENGTH * i + 200, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                }
+            }
+
+        }
     }
 
     // Renders the physical game board
@@ -143,6 +202,24 @@ public class GUIRenderer {
         renderGamePieces(gc);
     }
 
+    private ArrayList<String> aiDebugInformation = new ArrayList<>(Arrays.asList("","",""));
+
+    private void renderAIDebugMode(GraphicsContext gc) {
+        for(int i = 0; i < aiDebugInformation.size(); i++) {
+            gc.fillText(aiDebugInformation.get(i),canvasWidth,i * 10);
+        }
+
+    }
+
+    public void recordAction1Text(String string) {
+        aiDebugInformation.set(1,string);
+
+    }
+
+    public void recordAction2Text(String string) {
+        aiDebugInformation.set(2,string);
+    }
+
     // Renders the game pieces
     private void renderGamePieces(GraphicsContext gc) {
         for(GamePiece gamePiece: gameState.getGameBoard().getBlackPieces()) {
@@ -153,56 +230,47 @@ public class GUIRenderer {
         }
     }
 
-    // Renders an individual piece with its specified image from the pieceFolder
-    private void renderPiece(GraphicsContext gc, GamePiece gamePiece) {
-        gc.setFill(gamePiece.getGameTeam() == GameTeam.WHITE ? WHITE_PIECE_COLOR : BLACK_PIECE_COLOR);
-
+    public Image getPieceImage(GamePiece gamePiece) {
         switch(gamePiece.getGameTeam()) {
             case BLACK:
                 switch(gamePiece.getGamePieceType()) {
                     case PAWN:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/BP.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/BP.png");
                     case KNIGHT:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/BN.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/BN.png");
                     case BISHOP:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/BB.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/BB.png");
                     case ROOK:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/BR.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/BR.png");
                     case QUEEN:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/BQ.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/BQ.png");
                     case KING:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/BK.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/BK.png");
                 }
                 break;
             case WHITE:
                 switch(gamePiece.getGamePieceType()) {
                     case PAWN:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/WP.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/WP.png");
                     case KNIGHT:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/WN.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/WN.png");
                     case BISHOP:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/WB.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/WB.png");
                     case ROOK:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/WR.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/WR.png");
                     case QUEEN:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/WQ.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/WQ.png");
                     case KING:
-                        gc.drawImage(FileLoader.getImage(pieceFolder+ "/WK.png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
-                        break;
+                        return FileLoader.getImage(pieceFolder+ "/WK.png");
                 }
                 break;
         }
+        return null;
+    }
+    // Renders an individual piece with its specified image from the pieceFolder
+    private void renderPiece(GraphicsContext gc, GamePiece gamePiece) {
+        gc.setFill(gamePiece.getGameTeam() == GameTeam.WHITE ? WHITE_PIECE_COLOR : BLACK_PIECE_COLOR);
+        gc.drawImage(getPieceImage(gamePiece),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
         //gc.fillOval(BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
         //gc.setFill(TEXT_COLOR);
         //gc.fillText(gamePiece.getGamePieceType().toString(),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getX() * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + gamePiece.getBoardLocation().getY() * PIECE_LENGTH + PIECE_TEXTOFFSET);

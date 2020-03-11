@@ -16,6 +16,14 @@ public class AIController {
             GamePiece p = gameState.getGameBoard().getBlackPieces().get(i);
             if(gameState.getValidActions(p).size() > 1) {
                 Action action = gameState.getValidActions(p).get(0);
+                switch(gameState.getTurnActions(gameState.getCurrentTurnNumber()).size()) {
+                    case 0:
+                        guiRenderer.recordAction1Text(action.toString());
+                        break;
+                    case 1:
+                        guiRenderer.recordAction2Text(action.toString());
+                        break;
+                }
                 gameState.preformAction(action);
 
                 //GameState theRightTimeLine = gameState.branchState(action);
