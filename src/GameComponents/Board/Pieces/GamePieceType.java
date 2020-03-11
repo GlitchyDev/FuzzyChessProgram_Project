@@ -90,6 +90,15 @@ public enum GamePieceType {
         return 1.0/6.0*successes;
     }
 
+    public int requiredRoll(GamePieceType attackTarget) {
+        for(int i = 1; i <= 6; i++) {
+            if(isSuccessfulAttackRoll(attackTarget,i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public boolean isSuccessfulAttackRoll(GamePieceType attackTarget, int attackRoll) {
         switch(this) {
             case KING:

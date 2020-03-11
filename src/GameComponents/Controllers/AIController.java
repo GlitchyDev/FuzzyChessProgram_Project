@@ -42,6 +42,7 @@ public class AIController {
         guiRenderer.getSelectedPieces().clear();
         guiRenderer.getSelectedAttackAreas().clear();
         guiRenderer.getSelectedMoveAreas().clear();
+        guiRenderer.clearAttackChances();
     }
 
 

@@ -153,7 +153,7 @@ public class ProgramWindow extends Application {
     public Canvas createCanvas() {
         Canvas canvas = new Canvas(GUIRenderer.WINDOW_WIDTH+16,GUIRenderer.WINDOW_HEIGHT);
         canvas.setOnMouseMoved(event -> {
-
+            playerController.checkMouseMovement(event.getX(),event.getY());
         });
 
         canvas.setOnMouseClicked(event -> {

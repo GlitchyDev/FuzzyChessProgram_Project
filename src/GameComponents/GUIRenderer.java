@@ -21,14 +21,14 @@ import java.util.Arrays;
 public class GUIRenderer {
     private ProgramWindow gameWindow;
     // BOARD
-    private final static int WINDOW_LENGTH = 390;
+    private final static int WINDOW_LENGTH = 490;
     public static int WINDOW_WIDTH = WINDOW_LENGTH + 20;
     public static int WINDOW_HEIGHT = WINDOW_LENGTH + 45 + 100;
 
     public static final int BOARD_LENGTH = 420;
     private final Color BOARD_COLOR = Color.RED;
     public static final int BOARD_Y_OFFSET = 100;
-    public static final int BOARD_X_OFFSET = 0;
+    public static final int BOARD_X_OFFSET = 50;
 
     // SQUARES
     public static final int BOARD_SQUARE_OFFSET = 10;
@@ -52,10 +52,13 @@ public class GUIRenderer {
     private final ArrayList<BoardLocation> selectedPieces;
     private final ArrayList<BoardLocation> selectedMoveAreas;
     private final ArrayList<BoardLocation> selectedAttackAreas;
+    private int[][] attackChances;
     private final Color SELECTED_PIECE_COLOR = Color.AQUA;
     private final Color SELECTED_MOVE_COLOR = Color.GREEN;
     private final Color SELECTED_ATTACK_COLOR = Color.RED;
     private final double SELECTED_OPACITY = 0.5;
+
+    private BoardLocation currentCursorPosition;
 
 
 
@@ -76,6 +79,8 @@ public class GUIRenderer {
         selectedPieces = new ArrayList<>();
         selectedMoveAreas = new ArrayList<>();
         selectedAttackAreas = new ArrayList<>();
+        attackChances = new int[gameState.getGameBoard().getBOARD_WIDTH()][gameState.getGameBoard().getBOARD_HEIGHT()];
+        currentCursorPosition = null;
     }
 
 
@@ -175,6 +180,10 @@ public class GUIRenderer {
                 }
             }
 
+        }
+
+        if(currentCursorPosition != null && (gameState.getCurrentTeamTurn() == GameTeam.WHITE || !gameState.isUseAIMode())) {
+            renderAttackHelp(gc);
         }
     }
 
@@ -286,6 +295,16 @@ public class GUIRenderer {
         }
     }
 
+    private void renderAttackHelp(GraphicsContext gc) {
+        if(attackChances[currentCursorPosition.getX()][currentCursorPosition.getY()] != 0) {
+            gc.drawImage(FileLoader.getImage(otherFolder + "/" + "D" + attackChances[currentCursorPosition.getX()][currentCursorPosition.getY()] + ".png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + (currentCursorPosition.getX()-1) * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + currentCursorPosition.getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
+        }
+    }
+
+    public void setCurrentCursorPosition(BoardLocation currentCursorPosition) {
+        this.currentCursorPosition = currentCursorPosition;
+    }
+
     public void setDebugString(String debugString) {
         this.debugString = debugString;
     }
@@ -300,6 +319,14 @@ public class GUIRenderer {
 
     public ArrayList<BoardLocation> getSelectedAttackAreas() {
         return selectedAttackAreas;
+    }
+
+    public int[][] getAttackChances() {
+        return attackChances;
+    }
+
+    public void clearAttackChances() {
+        attackChances = new int[gameState.getGameBoard().getBOARD_WIDTH()][gameState.getGameBoard().getBOARD_HEIGHT()];
     }
 
     public ArrayList<BoardLocation> getSelectedPieces() {

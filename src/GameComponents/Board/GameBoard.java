@@ -260,4 +260,12 @@ public class GameBoard {
 
         return boardString;
     }
+
+    public int getBOARD_HEIGHT() {
+        return BOARD_HEIGHT;
+    }
+
+    public int getBOARD_WIDTH() {
+        return BOARD_WIDTH;
+    }
 }
