@@ -37,7 +37,7 @@ public class ProgramWindow extends Application {
     private AIController aiController;
 
     // Window Customization Options
-    private final int WINDOW_WIDTH = 420;
+    private final int WINDOW_WIDTH = 420 + 420;
     private final int WINDOW_HEIGHT = 445;
     private String PROGRAM_TITLE = "Fuzzy-Logic Chess Program";
 
