@@ -23,6 +23,14 @@ public class AIController {
             GamePiece p = originalGameState.getGameBoard().getBlackPieces().get(i);
             if(originalGameState.getValidActions(p).size() > 1) {
                 Action action = originalGameState.getValidActions(p).get(0);
+                switch(originalGameState.getTurnActions(originalGameState.getCurrentTurnNumber()).size()) {
+                    case 0:
+                        guiRenderer.recordAction1Text(action.toString());
+                        break;
+                    case 1:
+                        guiRenderer.recordAction2Text(action.toString());
+                        break;
+                }
                 GameState aiControllerGameState = originalGameState.branchState(action);
                 originalGameState.preformAction(action);
                 aiControllerEvaluationResult = evaluator.evaluateGameState(aiControllerGameState, p.getGameTeam());
@@ -47,6 +55,7 @@ public class AIController {
         guiRenderer.getSelectedPieces().clear();
         guiRenderer.getSelectedAttackAreas().clear();
         guiRenderer.getSelectedMoveAreas().clear();
+        guiRenderer.clearAttackChances();
     }
     public GUIRenderer getGuiRenderer() {
         return guiRenderer;
