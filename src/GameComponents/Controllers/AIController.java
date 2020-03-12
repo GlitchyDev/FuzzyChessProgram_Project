@@ -24,15 +24,15 @@ public class AIController {
     private final int LAYERS_DEEP = 4;
     public void preformAction(GameState originalGameState) {
         ArrayList<ActionSet> originalActionSet = new ArrayList<>();
-        originalActionSet.add(new ActionSet(evaluator.evaluateGameState(originalGameState,null),originalGameState));
+        originalActionSet.add(new ActionSet(evaluator.evaluateGameState(originalGameState,originalGameState.getCurrentTeamTurn()),originalGameState));
 
         ArrayList<ActionSet> bestActions = new ArrayList<>();
+        bestActions.addAll(originalActionSet);
         for(int i = 0; i < LAYERS_DEEP; i++) {
-            bestActions = getTopNActions(originalGameState.getCurrentTeamTurn(), originalActionSet);
+            bestActions = getTopNActions(originalGameState.getCurrentTeamTurn(), bestActions);
         }
 
         originalGameState.preformAction(bestActions.get(0).getActionList().get(0));
-        originalGameState.preformAction(bestActions.get(0).getActionList().get(1));
         afterTurn();
         // Find best value out of best actions list, grab the action set, look at the array index 0 and 1, do both actions, call afterTurn
 
