@@ -10,15 +10,17 @@ import GameComponents.GameState;
  */
 public class AttackAction extends Action {
     private final GamePiece targetPiece;
-    private final boolean isSuccessful;
+    private boolean forceSuccess;
+    private boolean isSuccessful;
     private final BoardLocation oldLocation;
     private final BoardLocation newLocation;
 
     // Successful Attack
-    public AttackAction(GamePiece gamePiece, ActionType actionType, GamePiece targetPiece, boolean isSuccessful) {
+    public AttackAction(GamePiece gamePiece, ActionType actionType, GamePiece targetPiece, boolean forceSuccess) {
         super(gamePiece, actionType);
         this.targetPiece = targetPiece;
-        this.isSuccessful = isSuccessful;
+        this.forceSuccess = forceSuccess;
+        this.isSuccessful = false;
         this.oldLocation = gamePiece.getBoardLocation();
         this.newLocation = targetPiece.getBoardLocation();
     }
@@ -40,7 +42,17 @@ public class AttackAction extends Action {
     }
 
     @Override
-    public void preformAction(GameBoard gameBoard) {
+    public void preformAction(GameState gameState, GameBoard gameBoard) {
+        if (!forceSuccess) {
+            int attackRoll = gameState.getDieRoll(getGamePiece(), getTargetPiece());
+            System.out.println("Gamepiece " + getGamePiece() + " attacking " + getTargetPiece() + " with a roll of " + attackRoll);
+            isSuccessful = getGamePiece().getGamePieceType().isSuccessfulAttackRoll(targetPiece.getGamePieceType(), attackRoll);
+         } else {
+            System.out.println("Forced Success!");
+            isSuccessful = true;
+        }
+        System.out.println("Attack Successful: " + isSuccessful);
+        // Here do currentResult = getDieRoll(); shit and figure out if stuff is successful
         if(isSuccessful) {
             gameBoard.deletePiece(newLocation);
             gameBoard.movePiece(oldLocation, newLocation);
@@ -53,6 +65,7 @@ public class AttackAction extends Action {
         if(isSuccessful) {
             gameBoard.movePiece(newLocation, oldLocation);
             gameBoard.addPiece(targetPiece, newLocation);
+            getGamePiece().setBoardLocation(oldLocation);
         }
     }
 

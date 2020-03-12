@@ -26,9 +26,10 @@ public abstract class Action {
 
     /**
      * Preforms the given action to the GameBoard provided
+     * @param gameState
      * @param gameBoard
      */
-    public abstract void preformAction(GameBoard gameBoard);
+    public abstract void preformAction(GameState gameState, GameBoard gameBoard);
 
     /**
      * Undo's the given action to the GameBoard provided

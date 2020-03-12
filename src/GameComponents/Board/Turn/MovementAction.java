@@ -27,7 +27,7 @@ public class MovementAction extends Action {
     }
 
     @Override
-    public void preformAction(GameBoard gameBoard) {
+    public void preformAction(GameState gameState, GameBoard gameBoard) {
         gameBoard.movePiece(oldLocation,newLocation);
         getGamePiece().setBoardLocation(newLocation);
     }

@@ -79,4 +79,88 @@ public enum GamePieceType {
         }
         return Boolean.parseBoolean(null);
     }
+
+    public double getSuccessAttackChance(GamePieceType attackTarget) {
+        int successes = 0;
+        for(int i = 1; i <= 6; i++) {
+            if(isSuccessfulAttackRoll(attackTarget,i)) {
+                successes++;
+            }
+        }
+        return 1.0/6.0*successes;
+    }
+
+    public int requiredRoll(GamePieceType attackTarget) {
+        for(int i = 1; i <= 6; i++) {
+            if(isSuccessfulAttackRoll(attackTarget,i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean isSuccessfulAttackRoll(GamePieceType attackTarget, int attackRoll) {
+        switch(this) {
+            case KING:
+            case QUEEN:
+                switch(attackTarget) {
+                    case KING:
+                    case QUEEN:
+                        return attackRoll >= 4;
+                    case BISHOP:
+                    case ROOK:
+                        return attackRoll >= 3;
+                    case KNIGHT:
+                        return attackRoll >= 2;
+                    case PAWN:
+                        return true;
+                }
+                break;
+            case BISHOP:
+            case ROOK:
+                switch(attackTarget) {
+                    case KING:
+                    case QUEEN:
+                        return attackRoll >= 5;
+                    case BISHOP:
+                    case ROOK:
+                        return attackRoll >= 4;
+                    case KNIGHT:
+                        return attackRoll >= 3;
+                    case PAWN:
+                        return attackRoll >= 2;
+                }
+                break;
+            case KNIGHT:
+                switch(attackTarget) {
+                    case KING:
+                    case QUEEN:
+                        return attackRoll >= 6;
+                    case BISHOP:
+                    case ROOK:
+                        return attackRoll >= 5;
+                    case KNIGHT:
+                        return attackRoll >= 4;
+                    case PAWN:
+                        return attackRoll >= 3;
+                }
+                break;
+            case PAWN:
+                switch(attackTarget) {
+                    case KING:
+                    case QUEEN:
+                        return attackRoll >= 6;
+                    case BISHOP:
+                    case ROOK:
+                        return attackRoll >= 6;
+                    case KNIGHT:
+                        return attackRoll >= 5;
+                    case PAWN:
+                        return attackRoll >= 4;
+                }
+                break;
+        }
+        System.out.println("ERROR ERROR! Attack roll unresolved! Error!");
+        return false;
+    }
 }

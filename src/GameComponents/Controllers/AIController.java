@@ -2,7 +2,6 @@ package GameComponents.Controllers;
 
 import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.GamePiece;
-import GameComponents.Board.Pieces.GamePieceType;
 import GameComponents.Board.Turn.Action;
 import GameComponents.GUIRenderer;
 import GameComponents.GameState;

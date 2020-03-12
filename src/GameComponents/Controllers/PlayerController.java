@@ -43,6 +43,7 @@ public class PlayerController {
                         guiRenderer.getSelectedPieces().clear();
                         guiRenderer.getSelectedMoveAreas().clear();
                         guiRenderer.getSelectedAttackAreas().clear();
+                        guiRenderer.clearAttackChances();
                         guiRenderer.getSelectedPieces().add(selectedPiece.getBoardLocation());
 
                         ArrayList<Action> possibleActions = gameState.getValidActions(selectedPiece);
@@ -58,6 +59,7 @@ public class PlayerController {
                                 if (action instanceof AttackAction) {
                                     guiRenderer.getSelectedAttackAreas().add(((AttackAction) action).getNewLocation());
                                     actionMoveSet.put(((AttackAction) action).getNewLocation(), action);
+                                    guiRenderer.getAttackChances()[((AttackAction) action).getNewLocation().getX()][((AttackAction) action).getNewLocation().getY()] = (int) (action.getGamePiece().getGamePieceType().requiredRoll(((AttackAction) action).getTargetPiece().getGamePieceType()));
                                 }
                             }
                         }
@@ -110,6 +112,24 @@ public class PlayerController {
                     guiRenderer.setDebugString("");
                 }
             }
+        }
+    }
+
+    public void checkMouseMovement(double canvasX, double canvasY) {
+
+        double adjustedX = canvasX - GUIRenderer.BOARD_X_OFFSET - GUIRenderer.BOARD_SQUARE_OFFSET;
+        double adjustedY = canvasY - GUIRenderer.BOARD_Y_OFFSET - GUIRenderer.BOARD_SQUARE_OFFSET;
+        int locX = (int) (adjustedX / GUIRenderer.PIECE_LENGTH);
+        int locY = (int) (adjustedY / GUIRenderer.PIECE_LENGTH);
+
+        if(adjustedX >=0 && adjustedY >= 0 && adjustedX <= gameState.getGameBoard().getBOARD_WIDTH()*GUIRenderer.PIECE_LENGTH && adjustedY <= gameState.getGameBoard().getBOARD_HEIGHT()*GUIRenderer.PIECE_LENGTH ) {
+            if (locX >= 0 && locY >= 0 && locX < gameState.getGameBoard().getBOARD_WIDTH() && locY < gameState.getGameBoard().getBOARD_HEIGHT()) {
+                guiRenderer.setCurrentCursorPosition(new BoardLocation(locX, locY));
+            } else {
+                guiRenderer.setCurrentCursorPosition(null);
+            }
+        } else {
+            guiRenderer.setCurrentCursorPosition(null);
         }
     }
 
