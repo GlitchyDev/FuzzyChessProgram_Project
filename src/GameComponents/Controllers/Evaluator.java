@@ -2,6 +2,7 @@ package GameComponents.Controllers;
 
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.GameTeam;
+import GameComponents.GUIRenderer;
 import GameComponents.GameState;
 import GameComponents.Board.Pieces.GamePiece;
 
@@ -11,7 +12,6 @@ import static GameComponents.Board.GameTeam.WHITE;
 import static GameComponents.Board.GameTeam.BLACK;
 
 public class Evaluator {
-
 
     private static final int kingval = 20000;
     private static final int queenval = 900;
