@@ -37,19 +37,19 @@ public class Evaluator {
 
         if(currentTeam == WHITE){
             System.out.print(currentTeam + ": ");
-            playerValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces());
-            opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces());
+            playerValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(),gameState);
+            opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(),gameState));
         }
         else{
             System.out.print(currentTeam + ": ");
-            playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces());
-            opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces());
+            playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(),gameState));
+            opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(),gameState));
         }
 
         return playerValue - opponentValue;
     }
 
-    private int getValueOfPieces(ArrayList<GamePiece> pieces) {
+    private int getValueOfPieces(ArrayList<GamePiece> pieces, GameState gameState) {
 
         int value = 0;
         for(GamePiece piece : pieces) {
@@ -74,6 +74,11 @@ public class Evaluator {
                     break;
             }
         }
+        // Get all actions of the piece
+        // Get the Attacks
+        // Add a value for each attack based on what piece is being attacked
+
+
         return value;
     }
 
