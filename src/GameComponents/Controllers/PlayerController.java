@@ -3,10 +3,7 @@ package GameComponents.Controllers;
 import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
-import GameComponents.Board.Turn.Action;
-import GameComponents.Board.Turn.AttackAction;
-import GameComponents.Board.Turn.MovementAction;
-import GameComponents.Board.Turn.SpecialAction;
+import GameComponents.Board.Turn.*;
 import GameComponents.GUIRenderer;
 import GameComponents.GameState;
 

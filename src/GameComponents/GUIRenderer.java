@@ -7,6 +7,7 @@ import GameComponents.Board.Pieces.GamePieceType;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Board.Turn.AttackAction;
 import GameComponents.Board.Turn.MovementAction;
+import GameComponents.Board.Turn.NullAction;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -160,6 +161,11 @@ public class GUIRenderer {
                 gc.fillText(action.getGamePiece().getBoardLocation().toString(),PIECE_LENGTH * i,10);
                 gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), PIECE_LENGTH * i,PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
             }
+            if(action instanceof NullAction) {
+                gc.drawImage(getPieceImage(action.getGamePiece()),PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
+                gc.fillText(action.getGamePiece().getBoardLocation().toString(),PIECE_LENGTH * i,10);
+                gc.drawImage(FileLoader.getImage("TV_2" + ".png"), PIECE_LENGTH * i,PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
+            }
         }
 
         if(gameState.getCurrentTurnNumber() > 1) {
@@ -177,6 +183,13 @@ public class GUIRenderer {
                     gc.drawImage(getPieceImage(action.getGamePiece()), PIECE_LENGTH * i + 200, 0, PIECE_LENGTH, PIECE_LENGTH);
                     gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i + 200, 10);
                     gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), PIECE_LENGTH * i + 200, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                }
+                if(action instanceof NullAction) {
+                    gc.drawImage(getPieceImage(action.getGamePiece()),PIECE_LENGTH * i+200,0,PIECE_LENGTH, PIECE_LENGTH);
+                    if(action.getGamePiece() != null) {
+                        gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i + 200, 10);
+                    }
+                    //gc.drawImage(FileLoader.getImage("TV_2" + ".png"), PIECE_LENGTH * i+200,PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
                 }
             }
 
@@ -240,41 +253,43 @@ public class GUIRenderer {
     }
 
     public Image getPieceImage(GamePiece gamePiece) {
-        switch(gamePiece.getGameTeam()) {
-            case BLACK:
-                switch(gamePiece.getGamePieceType()) {
-                    case PAWN:
-                        return FileLoader.getImage(pieceFolder+ "/BP.png");
-                    case KNIGHT:
-                        return FileLoader.getImage(pieceFolder+ "/BN.png");
-                    case BISHOP:
-                        return FileLoader.getImage(pieceFolder+ "/BB.png");
-                    case ROOK:
-                        return FileLoader.getImage(pieceFolder+ "/BR.png");
-                    case QUEEN:
-                        return FileLoader.getImage(pieceFolder+ "/BQ.png");
-                    case KING:
-                        return FileLoader.getImage(pieceFolder+ "/BK.png");
-                }
-                break;
-            case WHITE:
-                switch(gamePiece.getGamePieceType()) {
-                    case PAWN:
-                        return FileLoader.getImage(pieceFolder+ "/WP.png");
-                    case KNIGHT:
-                        return FileLoader.getImage(pieceFolder+ "/WN.png");
-                    case BISHOP:
-                        return FileLoader.getImage(pieceFolder+ "/WB.png");
-                    case ROOK:
-                        return FileLoader.getImage(pieceFolder+ "/WR.png");
-                    case QUEEN:
-                        return FileLoader.getImage(pieceFolder+ "/WQ.png");
-                    case KING:
-                        return FileLoader.getImage(pieceFolder+ "/WK.png");
-                }
-                break;
+        if(gamePiece != null) {
+            switch (gamePiece.getGameTeam()) {
+                case BLACK:
+                    switch (gamePiece.getGamePieceType()) {
+                        case PAWN:
+                            return FileLoader.getImage(pieceFolder + "/BP.png");
+                        case KNIGHT:
+                            return FileLoader.getImage(pieceFolder + "/BN.png");
+                        case BISHOP:
+                            return FileLoader.getImage(pieceFolder + "/BB.png");
+                        case ROOK:
+                            return FileLoader.getImage(pieceFolder + "/BR.png");
+                        case QUEEN:
+                            return FileLoader.getImage(pieceFolder + "/BQ.png");
+                        case KING:
+                            return FileLoader.getImage(pieceFolder + "/BK.png");
+                    }
+                    break;
+                case WHITE:
+                    switch (gamePiece.getGamePieceType()) {
+                        case PAWN:
+                            return FileLoader.getImage(pieceFolder + "/WP.png");
+                        case KNIGHT:
+                            return FileLoader.getImage(pieceFolder + "/WN.png");
+                        case BISHOP:
+                            return FileLoader.getImage(pieceFolder + "/WB.png");
+                        case ROOK:
+                            return FileLoader.getImage(pieceFolder + "/WR.png");
+                        case QUEEN:
+                            return FileLoader.getImage(pieceFolder + "/WQ.png");
+                        case KING:
+                            return FileLoader.getImage(pieceFolder + "/WK.png");
+                    }
+                    break;
+            }
         }
-        return null;
+        return FileLoader.getImage("Wine_Bottle.png");
     }
     // Renders an individual piece with its specified image from the pieceFolder
     private void renderPiece(GraphicsContext gc, GamePiece gamePiece) {

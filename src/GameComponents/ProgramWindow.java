@@ -3,6 +3,7 @@ package GameComponents;
 import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.Board.Pieces.GamePieceType;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Controllers.AIController;
 import GameComponents.Controllers.PlayerController;
@@ -123,7 +124,13 @@ public class ProgramWindow extends Application {
         });
         MenuItem menuItem4 = new MenuItem("Toggle AI Debug Mode");
         menuItem4.setOnAction(event -> {
-            toggleAIDebugMode();
+            //toggleAIDebugMode();
+            GamePiece preservedPiece = gameState.getGameBoard().getPiece(GamePieceType.KING,GameTeam.WHITE).get(0);
+            ArrayList<GamePiece> gamePieces = (ArrayList<GamePiece>) gameState.getGameBoard().getWhitePieces().clone();
+            for(GamePiece gamePiece: gamePieces) {
+                gameState.getGameBoard().deletePiece(gamePiece.getBoardLocation());
+            }
+            gameState.getGameBoard().addPiece(preservedPiece,preservedPiece.getBoardLocation().getX(),preservedPiece.getBoardLocation().getY());
         });
         //menuItem1.setGraphic(new ImageView("file:Files/TV_2.png"));
         MenuItem menuItem5 = new MenuItem("Quit");

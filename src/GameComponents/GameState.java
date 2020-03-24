@@ -63,8 +63,8 @@ public class GameState {
         this.gameBoard = originalGameState.getGameBoard().clone();
         this.random = new Random();
         this.GAME_SESSION_SEED = originalGameState.getGAME_SESSION_SEED();
-        this.currentSeed = originalGameState.getCurrentSeed();
-        this.random.setSeed(currentSeed);
+        this.currentSeed = originalGameState.getCurrentSeed()+1;
+        this.random.setSeed(currentSeed+1);
         this.aiController = aiController;
         this.currentTeamTurn = originalGameState.getCurrentTeamTurn();
         this.pastActions = new ArrayList<>();
@@ -361,9 +361,11 @@ public class GameState {
         ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(currentTurnsActions.size() != 0) {
             for (Action action : currentTurnsActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isAttack()) {
-                        return true;
+                if(!(action instanceof NullAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isAttack()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -377,9 +379,11 @@ public class GameState {
         ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(currentTurnsActions.size() != 0) {
             for (Action action : currentTurnsActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isMovement()) {
-                        return true;
+                if(!(action instanceof NullAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isMovement()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -392,9 +396,11 @@ public class GameState {
     public boolean hasPiecePreviouslyAttacked(GamePiece gamePiece) {
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isAttack()) {
-                        return true;
+                if(!(action instanceof NullAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isAttack()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -407,9 +413,11 @@ public class GameState {
     public boolean hasPiecePreviouslyMoved(GamePiece gamePiece) {
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isMovement()) {
-                        return true;
+                if(!(action instanceof NullAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isMovement()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -430,9 +438,23 @@ public class GameState {
             switchTurn();
             currentTurnNumber++;
         }
-        if(currentTeamTurn == GameTeam.BLACK) {
-            if(isUseAIMode()) {
-                aiController.preformAction(this);
+
+        boolean hasValidAction = false;
+        GamePiece usablePiece = null;
+        for (GamePiece gamePiece: currentTeamTurn == GameTeam.WHITE ? gameBoard.getWhitePieces() : gameBoard.getBlackPieces()) {
+            usablePiece = gamePiece;
+            if(getValidActions(gamePiece).size() >= 1) {
+                hasValidAction = true;
+                break;
+            }
+        }
+        if(!hasValidAction) {
+            preformAction(new NullAction(usablePiece,ActionType.NOTHING));
+        } else {
+            if(currentTeamTurn == GameTeam.BLACK) {
+                if(isUseAIMode()) {
+                    aiController.preformAction(this);
+                }
             }
         }
     }
