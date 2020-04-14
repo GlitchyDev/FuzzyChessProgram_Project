@@ -38,12 +38,12 @@ public class Evaluator {
         if(currentTeam == WHITE){
             System.out.print(currentTeam + ": ");
             playerValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(),gameState);
-            opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(),gameState));
+            opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(),gameState);
         }
         else{
             System.out.print(currentTeam + ": ");
-            playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(),gameState));
-            opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(),gameState));
+            playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(),gameState);
+            opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(),gameState);
         }
 
         return playerValue - opponentValue;
