@@ -4,4 +4,6 @@ package GameComponents.Board;
 public enum GameTeam {
     BLACK,
     WHITE,
+    BLACK_WIN,
+    WHITE_WIN,
 }

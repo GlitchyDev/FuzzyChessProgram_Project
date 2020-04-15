@@ -121,10 +121,6 @@ public class ProgramWindow extends Application {
         menuItem3.setOnAction(event -> {
             gameState.toggleAIMode(aiController);
         });
-        MenuItem menuItem4 = new MenuItem("Toggle AI Debug Mode");
-        menuItem4.setOnAction(event -> {
-            toggleAIDebugMode();
-        });
         //menuItem1.setGraphic(new ImageView("file:Files/TV_2.png"));
         MenuItem menuItem5 = new MenuItem("Quit");
         menuItem5.setOnAction(event -> {
@@ -136,7 +132,6 @@ public class ProgramWindow extends Application {
         menu.getItems().add(menuItem1);
         menu.getItems().add(menuItem2);
         menu.getItems().add(menuItem3);
-        menu.getItems().add(menuItem4);
         menu.getItems().add(menuItem5);
 
 

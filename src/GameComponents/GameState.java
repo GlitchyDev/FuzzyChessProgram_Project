@@ -38,6 +38,8 @@ public class GameState {
 
     private int currentResult = 0;
 
+    private boolean gameComplete = false;
+
     public int getCurrentResult() {
         return currentResult;
     }
@@ -423,13 +425,23 @@ public class GameState {
     public void preformAction(Action action) {
         action.preformAction(this,gameBoard);
         pastActions.add(action);
-        if(pastActions.size() % ACTIONS_PER_TURN == 0) {
-            switchTurn();
-            currentTurnNumber++;
-        }
-        if(currentTeamTurn == GameTeam.BLACK) {
-            if(isUseAIMode()) {
-                aiController.preformAction(this);
+        if(gameBoard.getPiece(GamePieceType.KING,GameTeam.WHITE).size() == 0 || gameBoard.getPiece(GamePieceType.KING,GameTeam.BLACK).size() == 0) {
+            gameComplete = true;
+            if(gameBoard.getPiece(GamePieceType.KING,GameTeam.WHITE).size() == 0) {
+                currentTeamTurn = GameTeam.BLACK_WIN;
+            }
+            if(gameBoard.getPiece(GamePieceType.KING,GameTeam.BLACK).size() == 0) {
+                currentTeamTurn = GameTeam.WHITE_WIN;
+            }
+        } else {
+            if (pastActions.size() % ACTIONS_PER_TURN == 0) {
+                switchTurn();
+                currentTurnNumber++;
+            }
+            if (currentTeamTurn == GameTeam.BLACK) {
+                if (isUseAIMode()) {
+                    aiController.preformAction(this);
+                }
             }
         }
     }
@@ -439,22 +451,24 @@ public class GameState {
      * @param action
      */
     public void undoAction(Action action, boolean doNotify) {
-        if(pastActions.size() % ACTIONS_PER_TURN == 0) {
-            switchTurn();
-            currentTurnNumber--;
-        }
-        action.undoAction(gameBoard);
-        pastActions.remove(action);
-        if(currentTeamTurn == GameTeam.BLACK) {
-            if(isUseAIMode() && doNotify) {
-                aiController.preformAction(this);
+        if(currentTeamTurn != GameTeam.BLACK_WIN && currentTeamTurn != GameTeam.WHITE_WIN) {
+            if (pastActions.size() % ACTIONS_PER_TURN == 0) {
+                switchTurn();
+                currentTurnNumber--;
             }
-        }
-        if(pastSeeds.size() > 1) {
-            currentSeed = pastSeeds.get(pastSeeds.size() - 1);
-            pastSeeds.remove(pastSeeds.size() - 1);
-        } else {
-            currentSeed = GAME_SESSION_SEED;
+            action.undoAction(gameBoard);
+            pastActions.remove(action);
+            if (currentTeamTurn == GameTeam.BLACK) {
+                if (isUseAIMode() && doNotify) {
+                    aiController.preformAction(this);
+                }
+            }
+            if (pastSeeds.size() > 1) {
+                currentSeed = pastSeeds.get(pastSeeds.size() - 1);
+                pastSeeds.remove(pastSeeds.size() - 1);
+            } else {
+                currentSeed = GAME_SESSION_SEED;
+            }
         }
     }
 
@@ -469,9 +483,9 @@ public class GameState {
                 return GameTeam.WHITE;
             case WHITE:
                 return GameTeam.BLACK;
-            default:
-        return null;
         }
+        return null;
+
     }
 
     public GameBoard getGameBoard() {

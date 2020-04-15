@@ -21,14 +21,14 @@ import java.util.Arrays;
 public class GUIRenderer {
     private ProgramWindow gameWindow;
     // BOARD
-    private final static int WINDOW_LENGTH = 490;
-    public static int WINDOW_WIDTH = WINDOW_LENGTH + 20;
-    public static int WINDOW_HEIGHT = WINDOW_LENGTH + 45 + 100;
+    private final static int WINDOW_LENGTH = 420;
+    public static int WINDOW_WIDTH = WINDOW_LENGTH-10;
+    public static int WINDOW_HEIGHT = WINDOW_LENGTH+15+100;
 
     public static final int BOARD_LENGTH = 420;
     private final Color BOARD_COLOR = Color.RED;
     public static final int BOARD_Y_OFFSET = 100;
-    public static final int BOARD_X_OFFSET = 50;
+    public static final int BOARD_X_OFFSET = 0;
 
     // SQUARES
     public static final int BOARD_SQUARE_OFFSET = 10;
@@ -189,8 +189,8 @@ public class GUIRenderer {
 
     // Renders the physical game board
     public void renderBoard(GraphicsContext gc) {
-        gc.setFill(BOARD_COLOR);
-        gc.fillRect(BOARD_X_OFFSET,BOARD_Y_OFFSET,BOARD_LENGTH,BOARD_LENGTH);
+        gc.drawImage(FileLoader.getImage("GameBoard/BorderNoExtension.png"),BOARD_X_OFFSET,BOARD_Y_OFFSET,BOARD_LENGTH,BOARD_LENGTH);
+
 
 
         // Renders the Debug square to keep the lil guy alive
@@ -200,13 +200,18 @@ public class GUIRenderer {
         boolean isBlack = false;
         for(int y = 0; y < 8; y++) {
             for(int x = 0; x < 8; x++) {
-                gc.setFill(isBlack ? SQUARE_WHITE_COLOR : SQUARE_BLACK_COLOR);
-                gc.fillRect(BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                if(isBlack) {
+                    gc.drawImage(FileLoader.getImage("GameBoard/BTile2.png"), BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                } else {
+                    gc.drawImage(FileLoader.getImage("GameBoard/WTile2.png"), BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+
+                }
                 isBlack = !isBlack;
+
             }
             isBlack = !isBlack;
         }
-        renderDebugCords(gc);
+        //renderDebugCords(gc);
 
         renderGamePieces(gc);
     }
@@ -297,7 +302,8 @@ public class GUIRenderer {
 
     private void renderAttackHelp(GraphicsContext gc) {
         if(attackChances[currentCursorPosition.getX()][currentCursorPosition.getY()] != 0) {
-            gc.drawImage(FileLoader.getImage(otherFolder + "/" + "D" + attackChances[currentCursorPosition.getX()][currentCursorPosition.getY()] + ".png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + (currentCursorPosition.getX()-1) * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + currentCursorPosition.getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
+            gc.setGlobalAlpha(0.5);
+            gc.drawImage(FileLoader.getImage(otherFolder + "/" + "D" + attackChances[currentCursorPosition.getX()][currentCursorPosition.getY()] + ".png"),BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + (currentCursorPosition.getX()) * PIECE_LENGTH,BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + currentCursorPosition.getY() * PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
         }
     }
 
