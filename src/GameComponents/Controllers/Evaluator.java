@@ -2,16 +2,19 @@ package GameComponents.Controllers;
 
 import GameComponents.Board.GameBoard;
 import GameComponents.Board.GameTeam;
+import GameComponents.Board.Pieces.GamePieceType;
+import GameComponents.Board.Turn.Action;
+import GameComponents.Board.Turn.AttackAction;
 import GameComponents.GameState;
 import GameComponents.Board.Pieces.GamePiece;
 
-import java.util.ArrayList;
+import java.util.*;
+import java.lang.Math;
 
 import static GameComponents.Board.GameTeam.WHITE;
 import static GameComponents.Board.GameTeam.BLACK;
 
 public class Evaluator {
-
 
     private static final int kingval = 20000;
     private static final int queenval = 900;
@@ -34,25 +37,46 @@ public class Evaluator {
         GameTeam opponent = (currentTeam == WHITE) ? BLACK : WHITE;
         int opponentValue = 0;
 
-
         if(currentTeam == WHITE){
-            System.out.print(currentTeam + ": ");
-            playerValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces());
-            opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces());
+            //System.out.print(currentTeam + ": ");
+            playerValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(), gameState);
+            opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(), gameState);
         }
         else{
-            System.out.print(currentTeam + ": ");
-            playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces());
-            opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces());
+            //System.out.print(currentTeam + ": ");
+            playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(), gameState);
+            opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(), gameState);
         }
 
         return playerValue - opponentValue;
     }
 
-    private int getValueOfPieces(ArrayList<GamePiece> pieces) {
+    private int getValueOfPieces(ArrayList<GamePiece> pieces, GameState gameState) {
+        int value = 0;
+
+        for(GamePiece piece : pieces) {
+
+            value += getValueOfAPiece(piece, gameState);
+        }
+
+        return value;
+    }
+
+    private int getValueOfAPiece(GamePiece piece,  GameState gameState) { //Add game state as a parameter
 
         int value = 0;
-        for(GamePiece piece : pieces) {
+        if(piece.getGameTeam() == GameTeam.WHITE){
+            ArrayList<Action> possibleActions = gameState.getValidActions(piece);
+            if(possibleActions.size() > 0){
+                for(Action action: possibleActions){
+                    if(action instanceof AttackAction){
+                        GamePiece targetPiece = ((AttackAction) action).getTargetPiece();
+                        value += ((int)Math.round((piece.getGamePieceType().getSuccessAttackChance(targetPiece.getGamePieceType())*getValueOfAPiece(targetPiece,gameState))));
+                    }
+                }
+
+            }
+        }
             switch(piece.getGamePieceType()) {
                 case PAWN:
                     value += pawnval;
@@ -73,7 +97,6 @@ public class Evaluator {
                     value += kingval;
                     break;
             }
-        }
         return value;
     }
 
