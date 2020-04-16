@@ -16,6 +16,8 @@ public enum ActionType {
     ATTACK_KING,
     CASTLING, // Castle movement
 
+    NOTHING,
+
 
     ;
 
@@ -29,6 +31,7 @@ public enum ActionType {
             case MOVEMENT_ROOK:
             case CASTLING:
             case MOVEMENT_QUEEN:
+            case NOTHING:
                 return false;
             case ATTACK_PAWN:
             case ATTACK_KNIGHT:
@@ -57,6 +60,7 @@ public enum ActionType {
             case ATTACK_ROOK:
             case ATTACK_QUEEN:
             case ATTACK_KING:
+            case NOTHING:
                 return false;
         }
         return Boolean.parseBoolean(null);

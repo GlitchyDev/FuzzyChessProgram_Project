@@ -360,9 +360,11 @@ public class GameState {
         ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(currentTurnsActions.size() != 0) {
             for (Action action : currentTurnsActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isAttack()) {
-                        return true;
+                if(!(action instanceof NothingAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isAttack()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -376,9 +378,11 @@ public class GameState {
         ArrayList<Action> currentTurnsActions = getTurnActions(currentTurnNumber);
         if(currentTurnsActions.size() != 0) {
             for (Action action : currentTurnsActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isMovement()) {
-                        return true;
+                if(!(action instanceof NothingAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isMovement()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -391,9 +395,11 @@ public class GameState {
     public boolean hasPiecePreviouslyAttacked(GamePiece gamePiece) {
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isAttack()) {
-                        return true;
+                if(!(action instanceof NothingAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isAttack()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -406,9 +412,11 @@ public class GameState {
     public boolean hasPiecePreviouslyMoved(GamePiece gamePiece) {
         if(pastActions.size() != 0) {
             for (Action action : pastActions) {
-                if (action.getGamePiece().equals(gamePiece)) {
-                    if (action.getActionType().isMovement()) {
-                        return true;
+                if(!(action instanceof NothingAction)) {
+                    if (action.getGamePiece().equals(gamePiece)) {
+                        if (action.getActionType().isMovement()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -441,6 +449,15 @@ public class GameState {
             if (currentTeamTurn == GameTeam.BLACK) {
                 if (isUseAIMode()) {
                     aiController.preformAction(this);
+                }
+            }
+            if(currentTeamTurn == GameTeam.WHITE) {
+                if(gameBoard.getWhitePieces().size() == 1) {
+                    if(getTurnActions(currentTurnNumber).size() == 1) {
+                        if(getValidActions(gameBoard.getWhitePieces().get(0)).size() == 0) {
+                            preformAction(new NothingAction(null));
+                        }
+                    }
                 }
             }
         }

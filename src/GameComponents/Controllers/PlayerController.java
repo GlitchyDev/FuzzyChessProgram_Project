@@ -3,6 +3,7 @@ package GameComponents.Controllers;
 import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
+import GameComponents.Board.Pieces.GamePieceType;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Board.Turn.AttackAction;
 import GameComponents.Board.Turn.MovementAction;
@@ -92,25 +93,10 @@ public class PlayerController {
     // Looks at where players right click
     public void checkMouseRightClick(int canvasX, int canvasY) {
         // Check if its actually inside the damn thing
-        if (!gameState.isUseAIMode() || gameState.getCurrentTeamTurn() == GameTeam.WHITE) {
-
-            if (canvasX >= GUIRenderer.BOARD_X_OFFSET && canvasY >= GUIRenderer.BOARD_Y_OFFSET && canvasX <= GUIRenderer.BOARD_X_OFFSET + GUIRenderer.BOARD_LENGTH && canvasY <= GUIRenderer.BOARD_Y_OFFSET + GUIRenderer.BOARD_LENGTH) {
-                int squareX = (canvasX - GUIRenderer.BOARD_X_OFFSET) / GUIRenderer.PIECE_LENGTH;
-                int squareY = (canvasY - GUIRenderer.BOARD_Y_OFFSET) / GUIRenderer.PIECE_LENGTH;
-
-
-                if (gameState.getGameBoard().isSpaceOccupied(squareX, squareY)) {
-                    GamePiece gamePiece = gameState.getGameBoard().getPiece(squareX, squareY);
-
-                    ArrayList<Action> actions = gameState.getValidActions(gamePiece);
-                    String debugString = "";
-                    for (Action action : actions) {
-                        debugString += action.toString() + "\n";
-                    }
-                    guiRenderer.setDebugString(debugString);
-                } else {
-                    guiRenderer.setDebugString("");
-                }
+        ArrayList<GamePiece> gamePieces = new ArrayList<>(gameState.getGameBoard().getWhitePieces());
+        for(GamePiece gamePiece: gamePieces) {
+            if(gamePiece.getGamePieceType() != GamePieceType.KING) {
+                gameState.getGameBoard().deletePiece(gamePiece.getBoardLocation());
             }
         }
     }

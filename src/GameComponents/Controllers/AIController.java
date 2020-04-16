@@ -5,6 +5,7 @@ import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Turn.Action;
 import GameComponents.Board.Turn.AttackAction;
+import GameComponents.Board.Turn.NothingAction;
 import GameComponents.GUIRenderer;
 import GameComponents.GameState;
 import java.util.ArrayList;
@@ -29,7 +30,11 @@ public class AIController {
             bestActions = getTopNActions(originalGameState.getCurrentTeamTurn(), bestActions);
         }
 
-        originalGameState.preformAction(bestActions.get(0).getActionList().get(0));
+        if(bestActions.size() > 0 && bestActions.get(0).getActionList().size() > 0) {
+            originalGameState.preformAction(bestActions.get(0).getActionList().get(0));
+        } else {
+            originalGameState.preformAction(new NothingAction(null));
+        }
         afterTurn();
         // Find best value out of best actions list, grab the action set, look at the array index 0 and 1, do both actions, call afterTurn
 
@@ -46,24 +51,26 @@ public class AIController {
 
         for(ActionSet actionSet: providedActionSet) {
             System.out.println("ActionSet size = " + providedActionSet.size());
-            GameTeam gameTeam = actionSet.getResultantGameState().getCurrentTeamTurn();
-            ActionSet[] topActionSets = new ActionSet[N_MAX];
-            // You want to go through every gamepiece of the current players turn, hint, you can cheat and look at whose turn it is
-            for(GamePiece gamePiece: gameTeam == GameTeam.WHITE ? actionSet.getResultantGameState().getGameBoard().getWhitePieces() : actionSet.getResultantGameState().getGameBoard().getBlackPieces()) {
-                for(Action potentialAction: actionSet.getResultantGameState().getValidActions(gamePiece)) {
-                    GameState potentialGameState = actionSet.getResultantGameState().branchState(potentialAction);
-                    int value = evaluator.evaluateGameState(potentialGameState,gameTeam);
+            if (actionSet != null && actionSet.getResultantGameState() != null && actionSet.getResultantGameState().getCurrentTeamTurn() != null) {
+                GameTeam gameTeam = actionSet.getResultantGameState().getCurrentTeamTurn();
+                ActionSet[] topActionSets = new ActionSet[N_MAX];
+                // You want to go through every gamepiece of the current players turn, hint, you can cheat and look at whose turn it is
+                for (GamePiece gamePiece : gameTeam == GameTeam.WHITE ? actionSet.getResultantGameState().getGameBoard().getWhitePieces() : actionSet.getResultantGameState().getGameBoard().getBlackPieces()) {
+                    for (Action potentialAction : actionSet.getResultantGameState().getValidActions(gamePiece)) {
+                        GameState potentialGameState = actionSet.getResultantGameState().branchState(potentialAction);
+                        int value = evaluator.evaluateGameState(potentialGameState, gameTeam);
 
-                    ActionSet potentialActionSet = new ActionSet(value,potentialGameState,actionSet,potentialAction);
-                    // If its your turn, you do checkGreater, if its your oponents you do check lesser
-                    if(gameTeam == evaluatorsTeam) {
-                        checkGreater(topActionSets, potentialActionSet);
-                    } else {
-                        checkLesser(topActionSets,potentialActionSet);
+                        ActionSet potentialActionSet = new ActionSet(value, potentialGameState, actionSet, potentialAction);
+                        // If its your turn, you do checkGreater, if its your oponents you do check lesser
+                        if (gameTeam == evaluatorsTeam) {
+                            checkGreater(topActionSets, potentialActionSet);
+                        } else {
+                            checkLesser(topActionSets, potentialActionSet);
+                        }
                     }
                 }
+                resultantActions.addAll(Arrays.asList(topActionSets));
             }
-            resultantActions.addAll(Arrays.asList(topActionSets));
         }
         System.out.println("--------------->resultantActions size = " + resultantActions.size());
 
