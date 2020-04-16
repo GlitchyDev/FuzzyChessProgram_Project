@@ -43,7 +43,7 @@ public enum GamePieceType {
             case KING:
                 availableActions.add(ActionType.ATTACK_KNIGHT);
                 availableActions.add(ActionType.ATTACK_KING);
-                availableActions.add(ActionType.CASTLING);
+                //availableActions.add(ActionType.CASTLING);
                 break;
         }
 
