@@ -67,8 +67,8 @@ public class GUIRenderer {
     private double canvasHeight;
     private int debug = 0;
 
-    private final String pieceFolder = "Pieces";
-    private final String otherFolder = "OtherSprites";
+    private final String pieceFolder = "/Pieces";
+    private final String otherFolder = "/OtherSprites";
 
 
     public GUIRenderer(GameState gameState, ProgramWindow gameWindow, double canvasWidth, double canvasHeight) {
@@ -141,24 +141,31 @@ public class GUIRenderer {
 
         renderInfoBoard(gc);
 
+        if(gameState.getCurrentTeamTurn() == GameTeam.BLACK_WIN) {
+            gc.drawImage(FileLoader.getImage("OtherSprites/BWin.png"),WINDOW_WIDTH/2-100,WINDOW_HEIGHT/2-100);
+        }
+        if(gameState.getCurrentTeamTurn() == GameTeam.WHITE_WIN) {
+            gc.drawImage(FileLoader.getImage("OtherSprites/WWin.png"),WINDOW_WIDTH/2-100,WINDOW_HEIGHT/2-100);
+        }
+
     }
 
     public void renderInfoBoard(GraphicsContext gc) {
-
+        gc.drawImage(FileLoader.getImage("/GameBoard/" + "Boardtop" + ".png"),0,0);
         ArrayList<Action> currentActions = gameState.getTurnActions(gameState.getCurrentTurnNumber());
         for(int i = 0; i < currentActions.size(); i++) {
             Action action = currentActions.get(i);
             if(action instanceof AttackAction) {
-                gc.drawImage(getPieceImage(action.getGamePiece()),PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
+                gc.drawImage(getPieceImage(action.getGamePiece()),10+PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
                 gc.setFill(Color.BLUE);
-                gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i, 10);
+                gc.fillText(action.getGamePiece().getBoardLocation().toFormal(), 10+PIECE_LENGTH * i, 10);
                 String attackResult = otherFolder + "/" + (action.getGamePiece().getGameTeam() == GameTeam.WHITE ? "W" : "B") + "Attack" + (((AttackAction) action).isSuccessful() ? "Win" : "Lose") + ".png";
-                gc.drawImage(FileLoader.getImage(attackResult), PIECE_LENGTH * i, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                gc.drawImage(FileLoader.getImage(attackResult), 10+PIECE_LENGTH * i, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
             }
             if(action instanceof MovementAction) {
-                gc.drawImage(getPieceImage(action.getGamePiece()),PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
-                gc.fillText(action.getGamePiece().getBoardLocation().toString(),PIECE_LENGTH * i,10);
-                gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), PIECE_LENGTH * i,PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
+                gc.drawImage(getPieceImage(action.getGamePiece()),10+PIECE_LENGTH * i,0,PIECE_LENGTH, PIECE_LENGTH);
+                gc.fillText(action.getGamePiece().getBoardLocation().toFormal(),PIECE_LENGTH * i,10);
+                gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), 10+PIECE_LENGTH * i,PIECE_LENGTH,PIECE_LENGTH, PIECE_LENGTH);
             }
         }
 
@@ -167,16 +174,16 @@ public class GUIRenderer {
             for (int i = 0; i < pastActions.size(); i++) {
                 Action action = pastActions.get(i);
                 if (action instanceof AttackAction) {
-                    gc.drawImage(getPieceImage(action.getGamePiece()), PIECE_LENGTH * i + 200, 0, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.drawImage(getPieceImage(action.getGamePiece()), ((WINDOW_WIDTH-PIECE_LENGTH*2)) + PIECE_LENGTH * i, 0, PIECE_LENGTH, PIECE_LENGTH);
                     gc.setFill(Color.BLUE);
-                    gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i + 200, 10);
+                    gc.fillText(action.getGamePiece().getBoardLocation().toString(), ((WINDOW_WIDTH-PIECE_LENGTH*2)) + PIECE_LENGTH * i, 10);
                     String attackResult = otherFolder + "/" + (action.getGamePiece().getGameTeam() == GameTeam.WHITE ? "W" : "B") + "Attack" + (((AttackAction) action).isSuccessful() ? "Win" : "Lose") + ".png";
-                    gc.drawImage(FileLoader.getImage(attackResult), PIECE_LENGTH * i + 200, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.drawImage(FileLoader.getImage(attackResult), ((WINDOW_WIDTH-PIECE_LENGTH*2)) + PIECE_LENGTH * i, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
                 }
                 if (action instanceof MovementAction) {
-                    gc.drawImage(getPieceImage(action.getGamePiece()), PIECE_LENGTH * i + 200, 0, PIECE_LENGTH, PIECE_LENGTH);
-                    gc.fillText(action.getGamePiece().getBoardLocation().toString(), PIECE_LENGTH * i + 200, 10);
-                    gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), PIECE_LENGTH * i + 200, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.drawImage(getPieceImage(action.getGamePiece()), ((WINDOW_WIDTH-PIECE_LENGTH*2)) + PIECE_LENGTH * i, 0, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.fillText(action.getGamePiece().getBoardLocation().toFormal(), ((WINDOW_WIDTH-PIECE_LENGTH*2)) + PIECE_LENGTH * i, 10);
+                    gc.drawImage(FileLoader.getImage(otherFolder + "/" + "Move" + ".png"), ((WINDOW_WIDTH-PIECE_LENGTH*2)) + PIECE_LENGTH * i, PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
                 }
             }
 
@@ -189,7 +196,7 @@ public class GUIRenderer {
 
     // Renders the physical game board
     public void renderBoard(GraphicsContext gc) {
-        gc.drawImage(FileLoader.getImage("GameBoard/BorderNoExtension.png"),BOARD_X_OFFSET,BOARD_Y_OFFSET,BOARD_LENGTH,BOARD_LENGTH);
+        gc.drawImage(FileLoader.getImage("/GameBoard/BorderNoExtension.png"),BOARD_X_OFFSET,BOARD_Y_OFFSET,BOARD_LENGTH,BOARD_LENGTH);
 
 
 
@@ -201,9 +208,9 @@ public class GUIRenderer {
         for(int y = 0; y < 8; y++) {
             for(int x = 0; x < 8; x++) {
                 if(isBlack) {
-                    gc.drawImage(FileLoader.getImage("GameBoard/BTile2.png"), BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.drawImage(FileLoader.getImage("/GameBoard/BTile2.png"), BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
                 } else {
-                    gc.drawImage(FileLoader.getImage("GameBoard/WTile2.png"), BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
+                    gc.drawImage(FileLoader.getImage("/GameBoard/WTile2.png"), BOARD_X_OFFSET + BOARD_SQUARE_OFFSET + x * PIECE_LENGTH, BOARD_Y_OFFSET + BOARD_SQUARE_OFFSET + y * PIECE_LENGTH, PIECE_LENGTH, PIECE_LENGTH);
 
                 }
                 isBlack = !isBlack;

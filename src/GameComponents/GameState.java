@@ -75,7 +75,11 @@ public class GameState {
             pastActions.add(action);
         }
         this.currentTurnNumber = originalGameState.getCurrentTurnNumber();
-        preformAction(branchingAction.clone(this));
+        Action clonedAction = branchingAction.clone(this);
+        if(clonedAction instanceof AttackAction) {
+            ((AttackAction) clonedAction).forceSuccess();
+        }
+        preformAction(clonedAction);
     }
 
 
@@ -562,5 +566,9 @@ public class GameState {
 
     public long getCurrentSeed() {
         return currentSeed;
+    }
+
+    public AIController getAiController() {
+        return aiController;
     }
 }

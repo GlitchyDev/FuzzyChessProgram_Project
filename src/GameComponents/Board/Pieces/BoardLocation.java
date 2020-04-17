@@ -80,4 +80,37 @@ public class BoardLocation {
     public String toString() {
         return "(" + x + "," + y + ")";
     }
+
+    public String toFormal() {
+        String returnString = "(";
+        switch(x) {
+            case 0:
+                returnString += "a";
+                break;
+            case 1:
+                returnString += "b";
+                break;
+            case 2:
+                returnString += "c";
+                break;
+            case 3:
+                returnString += "d";
+                break;
+            case 4:
+                returnString += "e";
+                break;
+            case 5:
+                returnString += "f";
+                break;
+            case 6:
+                returnString += "g";
+                break;
+            case 7:
+                returnString += "h";
+                break;
+        }
+        returnString += 8-y;
+        returnString += ")";
+        return returnString;
+    }
 }

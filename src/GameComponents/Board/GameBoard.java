@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class GameBoard {
     private final int BOARD_WIDTH = 8;
     private final int BOARD_HEIGHT = 8;
-    private final GamePiece[][] gameBoard;
-    private final ArrayList<GamePiece> whitePieces;
-    private final ArrayList<GamePiece> blackPieces;
+    private GamePiece[][] gameBoard;
+    private ArrayList<GamePiece> whitePieces;
+    private ArrayList<GamePiece> blackPieces;
 
     // Creates a Gameboard with the pieces already populated
     public GameBoard() {
@@ -267,5 +267,11 @@ public class GameBoard {
 
     public int getBOARD_WIDTH() {
         return BOARD_WIDTH;
+    }
+
+    public void clear() {
+        gameBoard = new GamePiece[BOARD_WIDTH][BOARD_HEIGHT];
+        this.whitePieces = new ArrayList<>();
+        this.blackPieces = new ArrayList<>();
     }
 }

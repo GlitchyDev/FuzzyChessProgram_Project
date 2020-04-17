@@ -11,8 +11,7 @@ import GameComponents.Board.Pieces.GamePiece;
 import java.util.*;
 import java.lang.Math;
 
-import static GameComponents.Board.GameTeam.WHITE;
-import static GameComponents.Board.GameTeam.BLACK;
+import static GameComponents.Board.GameTeam.*;
 
 public class Evaluator {
 
@@ -34,7 +33,21 @@ public class Evaluator {
         int playerValue = 0;
 
         // Opponent is opposite of
-        GameTeam opponent = (currentTeam == WHITE) ? BLACK : WHITE;
+        GameTeam opponent;
+        switch(currentTeam) {
+            case BLACK:
+                opponent = WHITE;
+                break;
+            case WHITE:
+                opponent = BLACK;
+                break;
+            case BLACK_WIN:
+                opponent = WHITE;
+                break;
+            case WHITE_WIN:
+                opponent = BLACK;
+                break;
+        }
         int opponentValue = 0;
 
         if(currentTeam == WHITE){
@@ -42,7 +55,7 @@ public class Evaluator {
             playerValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(), gameState);
             opponentValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(), gameState);
         }
-        else{
+        else if(currentTeam == BLACK) {
             //System.out.print(currentTeam + ": ");
             playerValue = getValueOfPieces(gameState.getGameBoard().getBlackPieces(), gameState);
             opponentValue = getValueOfPieces(gameState.getGameBoard().getWhitePieces(), gameState);

@@ -47,6 +47,7 @@ public class ProgramWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        new FileLoader();
         this.primaryStage = primaryStage;
         this.aiController = new AIController();
         this.gameState = new GameState(aiController);
@@ -69,6 +70,9 @@ public class ProgramWindow extends Application {
         this.guiRenderer = new GUIRenderer(gameState, this, canvas.getWidth(),canvas.getHeight());
         this.playerController = new PlayerController(gameState, guiRenderer);
         aiController.setGuiRenderer(guiRenderer);
+
+        primaryStage.getIcons().add(FileLoader.getImage("/OtherSprites/Icon16.png"));
+        primaryStage.getIcons().add(FileLoader.getImage("/OtherSprites/Icon32.png"));
 
 
         primaryStage.show();

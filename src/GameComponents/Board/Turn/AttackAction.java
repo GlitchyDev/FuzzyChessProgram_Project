@@ -79,6 +79,11 @@ public class AttackAction extends Action {
         return new AttackAction(newGameState.getGameBoard().getPiece(getGamePiece().getBoardLocation()),getActionType(),newGameState.getGameBoard().getPiece(getTargetPiece().getBoardLocation()),isSuccessful);
     }
 
+    public void forceSuccess() {
+        isSuccessful = true;
+        forceSuccess = true;
+    }
+
     @Override
     public String toString() {
         return "{ATTACK " + getActionType() + " of " + getGamePiece() + " at " + oldLocation + " attacking " + getTargetPiece() + " at " + newLocation + "}";

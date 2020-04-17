@@ -11,6 +11,9 @@ import GameComponents.GameState;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static GameComponents.Board.GameTeam.BLACK;
+import static GameComponents.Board.GameTeam.WHITE;
+
 public class AIController {
 
     private GUIRenderer guiRenderer;
@@ -31,7 +34,7 @@ public class AIController {
         }
 
         if(bestActions.size() > 0 && bestActions.get(0).getActionList().size() > 0) {
-            originalGameState.preformAction(bestActions.get(0).getActionList().get(0));
+            originalGameState.preformAction(getBestAction(bestActions).getActionList().get(0));
         } else {
             originalGameState.preformAction(new NothingAction(null));
         }
@@ -40,6 +43,18 @@ public class AIController {
 
     }
 
+
+    public ActionSet getBestAction(ArrayList<ActionSet> actionSets) {
+        ActionSet maxAction = null;
+        for(ActionSet actionset: actionSets) {
+            if(actionset != null) {
+                if (maxAction == null || maxAction.getEvaluationResult() < actionset.getEvaluationResult()) {
+                    maxAction = actionset;
+                }
+            }
+        }
+        return maxAction;
+    }
 
     /**
      * It will return the top N_Max Actionset from the provided actionsets
@@ -55,8 +70,28 @@ public class AIController {
                 GameTeam gameTeam = actionSet.getResultantGameState().getCurrentTeamTurn();
                 ActionSet[] topActionSets = new ActionSet[N_MAX];
                 // You want to go through every gamepiece of the current players turn, hint, you can cheat and look at whose turn it is
-                for (GamePiece gamePiece : gameTeam == GameTeam.WHITE ? actionSet.getResultantGameState().getGameBoard().getWhitePieces() : actionSet.getResultantGameState().getGameBoard().getBlackPieces()) {
+                ArrayList<GamePiece> gamePieces;
+                switch(actionSet.getResultantGameState().getCurrentTeamTurn()) {
+                    case BLACK:
+                        gamePieces = actionSet.getResultantGameState().getGameBoard().getBlackPieces();
+                        break;
+                    case WHITE:
+                        gamePieces = actionSet.getResultantGameState().getGameBoard().getWhitePieces();
+                        break;
+                    case BLACK_WIN:
+                        gamePieces = actionSet.getResultantGameState().getGameBoard().getBlackPieces();
+                        break;
+                    case WHITE_WIN:
+                        gamePieces = actionSet.getResultantGameState().getGameBoard().getWhitePieces();
+                        break;
+                    default:
+                        gamePieces = null;
+                }
+                for (GamePiece gamePiece : gamePieces) {
                     for (Action potentialAction : actionSet.getResultantGameState().getValidActions(gamePiece)) {
+                        if(potentialAction instanceof AttackAction) {
+                                System.out.println("Bees");
+                        }
                         GameState potentialGameState = actionSet.getResultantGameState().branchState(potentialAction);
                         int value = evaluator.evaluateGameState(potentialGameState, gameTeam);
 
@@ -69,7 +104,13 @@ public class AIController {
                         }
                     }
                 }
-                resultantActions.addAll(Arrays.asList(topActionSets));
+                for(int i = 0; i < N_MAX; i++) {
+                    if(topActionSets[i] != null) {
+                        resultantActions.add(topActionSets[i]);
+                    } else {
+                        resultantActions.add(new ActionSet(actionSet.getEvaluationResult(), actionSet.getResultantGameState(), actionSet, new NothingAction(null)));
+                    }
+                }
             }
         }
         System.out.println("--------------->resultantActions size = " + resultantActions.size());

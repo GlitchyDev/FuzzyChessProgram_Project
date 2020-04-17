@@ -4,10 +4,7 @@ import GameComponents.Board.GameTeam;
 import GameComponents.Board.Pieces.BoardLocation;
 import GameComponents.Board.Pieces.GamePiece;
 import GameComponents.Board.Pieces.GamePieceType;
-import GameComponents.Board.Turn.Action;
-import GameComponents.Board.Turn.AttackAction;
-import GameComponents.Board.Turn.MovementAction;
-import GameComponents.Board.Turn.SpecialAction;
+import GameComponents.Board.Turn.*;
 import GameComponents.GUIRenderer;
 import GameComponents.GameState;
 
@@ -92,14 +89,18 @@ public class PlayerController {
 
     // Looks at where players right click
     public void checkMouseRightClick(int canvasX, int canvasY) {
+
         // Check if its actually inside the damn thing
-        ArrayList<GamePiece> gamePieces = new ArrayList<>(gameState.getGameBoard().getWhitePieces());
-        for(GamePiece gamePiece: gamePieces) {
-            if(gamePiece.getGamePieceType() != GamePieceType.KING) {
-                gameState.getGameBoard().deletePiece(gamePiece.getBoardLocation());
-            }
-        }
+        gameState.getGameBoard().clear();
+        gameState.getGameBoard().addPiece(new GamePiece(GameTeam.BLACK, GamePieceType.QUEEN, new BoardLocation(1,1)), new BoardLocation(1,1));
+        gameState.getGameBoard().addPiece(new GamePiece(GameTeam.WHITE, GamePieceType.KING, new BoardLocation(0,0)), new BoardLocation(0,0));
+        gameState.getGameBoard().addPiece(new GamePiece(GameTeam.BLACK, GamePieceType.KING, new BoardLocation(3,3)), new BoardLocation(3,3));
+        gameState.toggleAIMode(gameState.getAiController());
+        gameState.preformAction(new NothingAction(null));
+        gameState.preformAction(new NothingAction(null));
+
     }
+
 
     public void checkMouseMovement(double canvasX, double canvasY) {
 
