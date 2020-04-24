@@ -89,7 +89,7 @@ public class PlayerController {
 
     // Looks at where players right click
     public void checkMouseRightClick(int canvasX, int canvasY) {
-
+        /*
         // Check if its actually inside the damn thing
         gameState.getGameBoard().clear();
         gameState.getGameBoard().addPiece(new GamePiece(GameTeam.BLACK, GamePieceType.QUEEN, new BoardLocation(1,1)), new BoardLocation(1,1));
@@ -98,7 +98,7 @@ public class PlayerController {
         gameState.toggleAIMode(gameState.getAiController());
         gameState.preformAction(new NothingAction(null));
         gameState.preformAction(new NothingAction(null));
-
+        */
     }
 
 

@@ -142,10 +142,10 @@ public class GUIRenderer {
         renderInfoBoard(gc);
 
         if(gameState.getCurrentTeamTurn() == GameTeam.BLACK_WIN) {
-            gc.drawImage(FileLoader.getImage("OtherSprites/BWin.png"),WINDOW_WIDTH/2-100,WINDOW_HEIGHT/2-100);
+            gc.drawImage(FileLoader.getImage("/OtherSprites/BWin.png"),WINDOW_WIDTH/2-100,WINDOW_HEIGHT/2-100);
         }
         if(gameState.getCurrentTeamTurn() == GameTeam.WHITE_WIN) {
-            gc.drawImage(FileLoader.getImage("OtherSprites/WWin.png"),WINDOW_WIDTH/2-100,WINDOW_HEIGHT/2-100);
+            gc.drawImage(FileLoader.getImage("/OtherSprites/WWin.png"),WINDOW_WIDTH/2-100,WINDOW_HEIGHT/2-100);
         }
 
     }

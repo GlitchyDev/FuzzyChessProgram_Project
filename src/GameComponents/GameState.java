@@ -331,12 +331,10 @@ public class GameState {
 
                                         boolean terminate = false;
                                         for(int i = 1; i <= 3; i++) {
-                                            if(!gameBoard.isSpaceOccupied(validKing.getBoardLocation().getDirectionLocation(rookDirection,i))) {
-
+                                            if(!gameBoard.isInsideBoard(validKing.getBoardLocation().getDirectionLocation(rookDirection,i))) {
+                                                terminate = true;
                                             } else {
-                                                if(gameBoard.getPiece(validKing.getBoardLocation().getDirectionLocation(rookDirection,i)) == validRook) {
-
-                                                } else {
+                                                if (gameBoard.isSpaceOccupied(validKing.getBoardLocation().getDirectionLocation(rookDirection, i)) && gameBoard.getPiece(validKing.getBoardLocation().getDirectionLocation(rookDirection, i)) != validRook) {
                                                     terminate = true;
                                                 }
                                             }
